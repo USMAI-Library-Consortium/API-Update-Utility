@@ -1,0 +1,11 @@
+# System
+.vscode
+*.DS_Store
+
+# Python
+*__pycache__
+.venv
+
+# Packaging
+dist
+src/*.egg-info
