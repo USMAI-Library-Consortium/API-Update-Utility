@@ -1,0 +1,8 @@
+{
+  "xpath": "test_xpath",
+  "xpathOperation": "update",
+  "apiUrl": "https://alma.exlibrisgroup.com/users/<resource_id>",
+  "dryRun": true,
+  "requestLimit": -1,
+  "updateFile": "input.csv"
+}
