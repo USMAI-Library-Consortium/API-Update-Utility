@@ -1,6 +1,7 @@
 {
   "xpath": "test_xpath",
   "xpathOperation": "update",
+  "xpathForResponseVerification": "test_verification_xpath",
   "apiUrl": "https://alma.exlibrisgroup.com/users/<resource_id>",
   "dryRun": true,
   "requestLimit": -1,

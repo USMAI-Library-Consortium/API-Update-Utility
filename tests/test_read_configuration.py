@@ -9,6 +9,7 @@ class TestReadConfiguration(unittest.TestCase):
 
         self.assertEqual(configuration["xpath"], "test_xpath")
         self.assertEqual(configuration["xpath_operation"], "update")
+        self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
         self.assertEqual(configuration["dry_run"], True)
         self.assertEqual(configuration["request_limit"], None)
 

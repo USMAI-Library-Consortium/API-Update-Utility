@@ -15,6 +15,7 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
         configuration = {
             "xpath": unparsed_configuration["xpath"],
             "xpath_operation": unparsed_configuration["xpathOperation"],
+            "test_xpath": unparsed_configuration["xpathForResponseVerification"],
             "dry_run": unparsed_configuration["dryRun"],
             "request_limit": request_limit
         }
