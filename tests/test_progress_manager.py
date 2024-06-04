@@ -24,7 +24,7 @@ class TestProgressManager(unittest.TestCase):
         # fully finished. 
         pm = ProgressManager("tests/testdata/testproject")
 
-        completed_api_resources = [ApiResource("7683", status="success"), ApiResource("3829", status="success"), ApiResource("2345", status="success")]
+        completed_api_resources = [ApiResource("7683", None, status="success"), ApiResource("3829", None, status="success"), ApiResource("2345", None, status="success")]
 
         new_state = pm._get_new_state(pm.previous_state, completed_api_resources)
         expected_new_state = [
@@ -70,7 +70,7 @@ class TestProgressManager(unittest.TestCase):
         # successful the second time. 
         pm = ProgressManager("tests/testdata/testproject", retry_failed=True)
 
-        completed_api_resources = [ApiResource("1234", "success") ,ApiResource("7683", status="success"), ApiResource("3829", status="success"), ApiResource("2345", status="success")]
+        completed_api_resources = [ApiResource("1234", None, status="success") ,ApiResource("7683", None, status="success"), ApiResource("3829", None, status="success"), ApiResource("2345", None, status="success")]
 
         new_state = pm._get_new_state(pm.previous_state, completed_api_resources)
         expected_new_state = [

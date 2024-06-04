@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vendor>
+    <code>11224</code>
+    <meta>
+        <gracePeriod>
+            <days>5</days>
+            <hours>12</hours>
+        </gracePeriod>
+    </meta>
+</vendor>
