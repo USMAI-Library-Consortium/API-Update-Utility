@@ -20,10 +20,20 @@ to update:
     where the ID should go in the URL. Use that term exactly, this is what the program 
     swaps out for the resource ID. 
 
-The other options are optional:
+OPTIONAL TO CHANGE:
 xpathOperation: This is whether you want to update, insert, or delete an element. Default
     is update. If you choose insert, you must include stringified XML as the value for 
     each resource. If you choose 'delete', you must include an xpath specifying which
     elements to delete RELATIVE TO THE MAIN XPATH (parent).
+dryRun: Run the program without making the update request. This allows you to inspect
+    the resulting XML bodies. Default is True for safety.
+requestLimit: Limit the number of requests to a certain number for caution's sake. 
+    Default is -1 (which means no limit). You can set 'null' to the same effect. 
+updateFile: The name of the file containing the list of resource IDs and update values.
+    Default is 'input.csv'. This must be a CSV file in the format described below.
 
+CSV file:
+
+You MUST create a CSV file containing x columns: one called 'Resource ID' which contains
+the ID used to pull each resource from the server, and the other called...
 
