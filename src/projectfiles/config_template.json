@@ -1,0 +1,9 @@
+{
+  "xpath": "REQUIRED",
+  "xpathOperation": "update",
+  "xpathForGetResponseVerification": "REQUIRED",
+  "apiUrlTemplate": "https://example.com/resource/<resource_id>",
+  "dryRun": true,
+  "requestLimit": -1,
+  "updateFile": "input.csv"
+}

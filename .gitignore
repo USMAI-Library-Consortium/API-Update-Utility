@@ -6,6 +6,9 @@
 *__pycache__
 .venv
 
+# Program
+/projects/*
+
 # Packaging
 dist
 src/*.egg-info

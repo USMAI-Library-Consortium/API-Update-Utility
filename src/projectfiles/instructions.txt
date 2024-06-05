@@ -1,0 +1,29 @@
+Welcome to the API update utility! 
+
+This is a new project you've created. There's a few steps you'll need to go through
+to get it up and running. 
+
+You'll start by updating the config.json file. There's a few fields you'll need
+to update:
+1. xpath: If you're not overriding the built-in function to update the XML, you'll
+    need to include the XML xpath pointing at the element you want to update. If
+    you're adding or deleting an element rather than updating an element value, 
+    point this to the element's parent.
+
+2. xpathForGetResponseVerification: This verifies whether the XML returned by the
+    API server is valid. You should include an xpath here pointing to an element 
+    that a valid resource should ALWAY have, even if it's a root element like <user>
+    or <vendor>
+
+3. apiUrlTemplate: This is the format of the URL for the GET and PUT requests. You'll
+    see an example URL there. As in the example, you should include <resource_id> 
+    where the ID should go in the URL. Use that term exactly, this is what the program 
+    swaps out for the resource ID. 
+
+The other options are optional:
+xpathOperation: This is whether you want to update, insert, or delete an element. Default
+    is update. If you choose insert, you must include stringified XML as the value for 
+    each resource. If you choose 'delete', you must include an xpath specifying which
+    elements to delete RELATIVE TO THE MAIN XPATH (parent).
+
+
