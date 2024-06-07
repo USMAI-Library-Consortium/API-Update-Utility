@@ -38,7 +38,13 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
 
             for index, row in enumerate(reader):
                 if index == 0:
+                    # Throw an error if the number of values does not correspond to the number of xpaths
+                    number_of_xpaths_provided = len(configuration["xpaths"])
+                    number_of_values_provided = len(row[1:])
+                    if number_of_xpaths_provided != number_of_values_provided:
+                        raise ValueError("The number of values does not correspond to the number of xpaths.")
                     continue
+
                 identifier = row[0]
                 if identifier not in api_resources_finished:
                     api_url = unparsed_configuration["apiUrlTemplate"].replace("<resource_id>", identifier)

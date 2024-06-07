@@ -48,3 +48,24 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(api_resources[1].update_values[0], "Denmark")
         self.assertEqual(api_resources[2].update_values[0], "Chile")
 
+    def test_read_configuration_multiple_xpaths(self):
+        configuration, api_resources = read_configuration("tests/testdata/testprojectconfig_multiplexpaths", [])
+
+        self.assertListEqual(configuration["xpaths"], ["test_xpath", "test_xpath_2"])
+        self.assertListEqual(configuration["xpath_operations"], ["update", "delete"])
+        self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
+        self.assertEqual(configuration["dry_run"], True)
+        self.assertEqual(configuration["request_limit"], None)
+
+        self.assertListEqual(api_resources[0].update_values, ["USA", "20093"])
+        self.assertListEqual(api_resources[1].update_values, ["USA", "88283"])
+        self.assertListEqual(api_resources[2].update_values, ["Denmark", "024"])
+        self.assertListEqual(api_resources[3].update_values, ["Chile", "8839"])
+
+    def test_read_configuration_mismatched_xpaths_and_values(self):
+        """There should be the same number of values and xpaths"""
+        with self.assertRaises(ValueError):
+            configuration, api_resources = read_configuration("tests/testdata/testprojectconfig_mismatchedxpaths", [])
+
+        
+
