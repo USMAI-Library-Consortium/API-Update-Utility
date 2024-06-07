@@ -7,8 +7,8 @@ class TestReadConfiguration(unittest.TestCase):
     def test_read_configuration(self):
         configuration, api_resources = read_configuration("tests/testdata/testprojectconfig", [])
 
-        self.assertEqual(configuration["xpath"], "test_xpath")
-        self.assertEqual(configuration["xpath_operation"], "update")
+        self.assertEqual(configuration["xpaths"], ["test_xpath"])
+        self.assertEqual(configuration["xpath_operations"], ["update"])
         self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
         self.assertEqual(configuration["dry_run"], True)
         self.assertEqual(configuration["request_limit"], None)
@@ -23,21 +23,16 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(api_resources[2].api_url, "https://alma.exlibrisgroup.com/users/23844")
         self.assertEqual(api_resources[3].api_url, "https://alma.exlibrisgroup.com/users/182848")
 
-        self.assertEqual(api_resources[0].update_value, "USA")
-        self.assertEqual(api_resources[1].update_value, "USA")
-        self.assertEqual(api_resources[2].update_value, "Denmark")
-        self.assertEqual(api_resources[3].update_value, "Chile")
-
-        self.assertEqual(api_resources[0].operation, "update")
-        self.assertEqual(api_resources[1].operation, "update")
-        self.assertEqual(api_resources[2].operation, "update")
-        self.assertEqual(api_resources[3].operation, "update")
+        self.assertEqual(api_resources[0].update_values[0], "USA")
+        self.assertEqual(api_resources[1].update_values[0], "USA")
+        self.assertEqual(api_resources[2].update_values[0], "Denmark")
+        self.assertEqual(api_resources[3].update_values[0], "Chile")
 
     def test_read_configuration_with_previously_completed_values(self):
         configuration, api_resources = read_configuration("tests/testdata/testprojectconfig", ["19982"])
 
-        self.assertEqual(configuration["xpath"], "test_xpath")
-        self.assertEqual(configuration["xpath_operation"], "update")
+        self.assertEqual(configuration["xpaths"], ["test_xpath"])
+        self.assertEqual(configuration["xpath_operations"], ["update"])
         self.assertEqual(configuration["dry_run"], True)
         self.assertEqual(configuration["request_limit"], None)
 
@@ -49,11 +44,7 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(api_resources[1].api_url, "https://alma.exlibrisgroup.com/users/23844")
         self.assertEqual(api_resources[2].api_url, "https://alma.exlibrisgroup.com/users/182848")
 
-        self.assertEqual(api_resources[0].update_value, "USA")
-        self.assertEqual(api_resources[1].update_value, "Denmark")
-        self.assertEqual(api_resources[2].update_value, "Chile")
-
-        self.assertEqual(api_resources[0].operation, "update")
-        self.assertEqual(api_resources[1].operation, "update")
-        self.assertEqual(api_resources[2].operation, "update")
+        self.assertEqual(api_resources[0].update_values[0], "USA")
+        self.assertEqual(api_resources[1].update_values[0], "Denmark")
+        self.assertEqual(api_resources[2].update_values[0], "Chile")
 

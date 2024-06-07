@@ -12,24 +12,37 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
         if unparsed_configuration["requestLimit"] > 0:
             request_limit = unparsed_configuration["requestLimit"]
 
+        # If the user just wants to do one type of operation (for example, "update"), then set that operation
+        # true for all xpaths by creating an array with the same length as the xpaths.
+        expanded_operations = []
+        if isinstance(unparsed_configuration["xpathOperations"], str):
+            operation_to_do_for_all_xpaths = unparsed_configuration["xpathOperations"]
+
+            for _ in range(0,len(unparsed_configuration["xpaths"])):
+                expanded_operations.append(operation_to_do_for_all_xpaths)
+        else:
+            expanded_operations = unparsed_configuration["xpathOperations"]
+
         configuration = {
-            "xpath": unparsed_configuration["xpath"],
-            "xpath_operation": unparsed_configuration["xpathOperation"],
+            "xpaths": unparsed_configuration["xpaths"],
+            "xpath_operations": expanded_operations,
             "test_xpath": unparsed_configuration["xpathForGetResponseVerification"],
             "dry_run": unparsed_configuration["dryRun"],
-            "request_limit": request_limit
+            "request_limit": request_limit,
         }
 
         api_resources: list[ApiResource] = []
         
         with open(f"{project_path}/{unparsed_configuration["updateFile"]}", "r", encoding="utf-8-sig") as uf:
-            reader = csv.DictReader(uf)
+            reader = csv.reader(uf)
 
-            for row in reader:
-                identifier = row["Resource ID"]
+            for index, row in enumerate(reader):
+                if index == 0:
+                    continue
+                identifier = row[0]
                 if identifier not in api_resources_finished:
                     api_url = unparsed_configuration["apiUrlTemplate"].replace("<resource_id>", identifier)
-                    api_resource = ApiResource(identifier, api_url, row["Value"], operation=configuration["xpath_operation"])
+                    api_resource = ApiResource(identifier, api_url, row[1:])
                     api_resources.append(api_resource)
             
         return configuration, api_resources

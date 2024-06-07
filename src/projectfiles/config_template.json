@@ -1,6 +1,6 @@
 {
-  "xpath": "REQUIRED",
-  "xpathOperation": "update",
+  "xpaths": "REQUIRED",
+  "xpathOperations": "update",
   "xpathForGetResponseVerification": "REQUIRED",
   "apiUrlTemplate": "https://example.com/resource/<resource_id>",
   "dryRun": true,
