@@ -67,5 +67,10 @@ class TestReadConfiguration(unittest.TestCase):
         with self.assertRaises(ValueError):
             configuration, api_resources = read_configuration("tests/testdata/testprojectconfig_mismatchedxpaths", [])
 
+    def test_read_configuration_mismatched_xpaths_and_operations(self):
+        """If 'operations' is an array, there should be the same number of operations as xpaths"""
+        with self.assertRaises(ValueError):
+            configuration, api_resources = read_configuration("tests/testdata/testprojectconfig_mismatched_operations", [])
+
         
 
