@@ -25,6 +25,7 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
             number_of_xpaths = len(unparsed_configuration["xpaths"])
             if number_of_xpath_operations != number_of_xpaths:
                 raise ValueError("If you include an array of xpathOperations, it must be equal to the number of xpaths.")
+            
             expanded_operations = unparsed_configuration["xpathOperations"]
 
         configuration = {
