@@ -4,7 +4,9 @@ import os
 class Backup():
     def __init__(self, project_path: str):
         self.backup_location = f"{project_path}/backups"
-        os.mkdir(self.backup_location)
+
+        if not os.path.exists(self.backup_location):
+            os.mkdir(self.backup_location)
 
         self.files_written = 0
 
