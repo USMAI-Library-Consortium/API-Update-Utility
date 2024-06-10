@@ -11,20 +11,32 @@ from src.verify_response_content import verify_response_content
 
 def main(project_name: str):
     project_path = f"projects/{project_name}"
-    
     if not os.path.exists(project_path):
         raise FileNotFoundError(f"Project '{project_name}' has not been initialized.")
+    
+    # Initialize logger
+    logging.basicConfig(filename=f"{project_path}/logs.log")
     
     # Get the information from the files
     pm = ProgressManager(project_path)
     configuration, api_resources = read_configuration(f"projects/{project_name}", pm.previously_completed_api_resources)
 
     # Retrieve the resources
-    backuper = Backup(project_path=project_path)
-    api_resources = retrieve_resources(api_resources, configuration["request_limit"], backuper)
+    api_resources = retrieve_resources(api_resources, configuration["request_limit"])
 
     # Verify the responses
     api_resources = verify_response_content(api_resources, configuration["test_xpath"])
+
+    # Backup the responses that passed
+    backuper = Backup(project_path=project_path)
+    for api_resource in api_resources:
+        if api_resource.status == "pending":
+            result = backuper.backup(api_resource.identifier, api_resource.xml_from_get_request)
+            if result == -1:
+                logging.error(f"Could not back up vendor {api_resource.identifier}")
+                api_resource.status = "failed"
+        else:
+            logging.info(f"Skipping backup of resource {api_resource.identifier} due to status.")
 
     # Update the XML bodies
     xu = XMLUpdater(xpaths=configuration["xpaths"], operations=configuration["xpath_operations"])
