@@ -52,7 +52,11 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
 
                 identifier = row[0]
                 if identifier not in api_resources_finished:
+
                     api_url = unparsed_configuration["apiUrlTemplate"].replace("<resource_id>", identifier)
+                    if "queryParamAPIKey" in unparsed_configuration.keys() and type(unparsed_configuration["queryParamAPIKey"]) == str:
+                        api_url = api_url + "?" + unparsed_configuration["queryParamAPIKey"].lstrip("?")
+
                     api_resource = ApiResource(identifier, api_url, row[1:])
                     api_resources.append(api_resource)
             
