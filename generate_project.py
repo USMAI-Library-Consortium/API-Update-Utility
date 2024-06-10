@@ -30,6 +30,12 @@ def main(project_name: str):
     with open(f"{project_path}/instructions.txt", "w") as inst_f_out:
         inst_f_out.write(instructions)
 
+    with open("src/projectfiles/progress.csv", "r", encoding="utf-8-sig") as prog_f:
+        progress_file = prog_f.read()
+
+    with open(f"{project_path}/progress.csv", "w", encoding="utf-8-sig") as prog_f_out:
+        prog_f_out.write(progress_file)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("project_name", help="The name of the project to generate.", type=str)

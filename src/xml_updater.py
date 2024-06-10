@@ -27,7 +27,8 @@ class XMLUpdater:
 
     def run(self, api_resources: list[ApiResource]) -> list[ApiResource]:
         for api_resource in api_resources:
-            api_resource.xml_for_update_resquest = self.update_function(api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
+            if api_resource.status == "pending":
+                api_resource.xml_for_update_resquest = self.update_function(api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
 
         return api_resources
 
