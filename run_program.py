@@ -2,6 +2,7 @@ import argparse
 import os
 import logging
 import shutil
+import requests
 
 from src.read_configuration import read_configuration
 from src.retrieve_resource import retrieve_resources
@@ -72,6 +73,22 @@ def main(project_name: str):
 
         logging.info("Dry run complete.")
         return
+    else:
+        # Run the actual utility
+        session = requests.Session()
+        try:
+            for api_resource in api_resources:
+                response = session.put(api_resource.api_url, data=api_resource.xml_for_update_request, headers={"Content-Type": "application/xml"})
+                if response.status_code == 200:
+                    api_resource.status = "success"
+                    logging.info(f"Resource {api_resource.identifier} updated successfully.")
+                else:
+                    api_resource.status = "failed"
+                    logging.warning(f"Resource {api_resource.identifier} NOT UPDATED SUCCESSFULLY. Status code: {response.status_code}")
+                api_resource.update_response = response.content
+        finally:
+            pm.save_state(api_resources)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

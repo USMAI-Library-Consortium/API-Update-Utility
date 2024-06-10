@@ -9,8 +9,8 @@ class ProgressManager:
         self.progress_file_name = f"{project_path}/progress.csv"
         self.previously_completed_api_resources, self.previous_state = self._parse_application_progress(self.progress_file_name, retry_failed=retry_failed)
 
-    def save_state(self, completed_api_resources: list[ApiResource]):
-        new_state = self._get_new_state(self.previous_state, completed_api_resources)
+    def save_state(self, api_resources: list[ApiResource]):
+        new_state = self._get_new_state(self.previous_state, api_resources)
 
         with open(self.progress_file_name, "w", newline="", encoding="utf-8-sig") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=["ID", "Status"])
@@ -23,10 +23,10 @@ class ProgressManager:
                 })
 
     @staticmethod
-    def _get_new_state(previous_state: list[dict], completed_api_resources: list[ApiResource]):
+    def _get_new_state(previous_state: list[dict], api_resources: list[ApiResource]):
         new_state = previous_state
 
-        for completed_api_resource in completed_api_resources:
+        for completed_api_resource in api_resources:
             if completed_api_resource.status == "pending":
                 continue
             else:
