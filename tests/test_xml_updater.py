@@ -19,7 +19,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource_updated_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -36,7 +36,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource_inserted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -53,7 +53,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource_deleted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -70,7 +70,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -87,7 +87,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource_children_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -104,7 +104,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource_with_list_middle_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -121,7 +121,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
         with open("tests/testdata/xml_resource_with_list_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
-        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_resquest)
+        real_xml_dict = xmltodict.parse(updated_resources[0].xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)

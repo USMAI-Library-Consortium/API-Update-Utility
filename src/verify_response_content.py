@@ -16,8 +16,10 @@ def verify_response_content(api_resources: list[ApiResource], test_xpath: str):
         xpath_results = tree.xpath(test_xpath)
 
         if len(xpath_results) == 0:
-            logging.warning(f"Malformed GET response from resource with ID {api_resource.identifier}.")
+            logging.warning(f"Malformed GET response from resource with ID {api_resource.identifier}. URL: {api_resource.api_url}")
             api_resource.status = "failed"
+        else:
+            logging.info(f"Verification for resource {api_resource.identifier} successful.")
         
         resources_verified.append(api_resource)
 
