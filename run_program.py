@@ -37,17 +37,18 @@ def main(project_name: str):
     logging.info("Done")
 
     # Backup the responses that passed
-    logging.info("Beginning backup process...")
-    backuper = Backup(project_path=project_path)
-    for api_resource in api_resources:
-        if api_resource.status == "pending":
-            result = backuper.backup(api_resource.identifier, api_resource.xml_from_get_request)
-            if result == -1:
-                logging.error(f"Could not back up vendor {api_resource.identifier}")
-                api_resource.status = "failed"
-        else:
-            logging.info(f"Skipping backup of resource {api_resource.identifier} due to status '{api_resource.status}'.")
-    logging.info("Done")
+    if configuration["dry_run"] == False:
+        logging.info("Beginning backup process...")
+        backuper = Backup(project_path=project_path)
+        for api_resource in api_resources:
+            if api_resource.status == "pending":
+                result = backuper.backup(api_resource.identifier, api_resource.xml_from_get_request)
+                if result == -1:
+                    logging.error(f"Could not back up vendor {api_resource.identifier}")
+                    api_resource.status = "failed"
+            else:
+                logging.info(f"Skipping backup of resource {api_resource.identifier} due to status '{api_resource.status}'.")
+        logging.info("Done")
 
     # Update the XML bodies
     logging.info("Beginning body update process...")
