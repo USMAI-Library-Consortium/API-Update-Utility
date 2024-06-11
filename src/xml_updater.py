@@ -40,7 +40,7 @@ def default_update_function(resource_id: str, xml_from_get_request: bytes, updat
             for el_to_delete in tree.xpath(f"{xpath}/{update_values[i]}"):
                 el_to_update.remove(el_to_delete)
 
-    return etree.tostring(tree)
+    return etree.tostring(tree, pretty_print = True)
 
 class XMLUpdater:
     def __init__(self, update_function: callable = default_update_function, xpaths: list[str] | None = None, operations: list[str] | str | None = None):
