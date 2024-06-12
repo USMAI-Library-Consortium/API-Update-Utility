@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vendor>
+    <code>BRILL</code>
+    <name>Brill Online</name>
+    <status desc="Inactive">INACTIVE</status>
+    <liable_for_vat>true</liable_for_vat>
+    <language desc="English">en</language>
+    <material_supplier>true</material_supplier>
+    <access_provider>true</access_provider>
+    <licensor>false</licensor>
+    <governmental>false</governmental>
+    <vendor_libraries>
+        <library include_sub_units="true">
+            <code desc="University of Maryland College Park">01USMAI_UMCP</code>
+        </library>
+    </vendor_libraries>
+    <vendor_currencies>
+        <currency desc="Lek">ALL</currency>
+    </vendor_currencies>
+    <accounts>
+        <account>
+            <account_id>13269630000503</account_id>
+            <code>BRILL</code>
+            <description>Brill Online</description>
+            <status desc="Active">ACTIVE</status>
+            <account_libraries>
+                <library include_sub_units="true">
+                    <code desc="University of Maryland College Park">01USMAI_UMCP</code>
+                </library>
+            </account_libraries>
+            <payment_methods>
+                <payment_method desc="Accounting Department">ACCOUNTINGDEPARTMENT</payment_method>
+            </payment_methods>
+            <subscription_interval>90</subscription_interval>
+            <reclaim_interval>0</reclaim_interval>
+            <contact_info>
+                <addresses/>
+                <emails/>
+                <phones/>
+            </contact_info>
+            <contact_persons/>
+        </account>
+    </accounts>
+    <contact_persons/>
+    <interfaces>
+        <interface>
+            <interface_id>13269780000503</interface_id>
+            <name>Brill Online reference works</name>
+            <description>Brill Online</description>
+            <status desc="Active">ACTIVE</status>
+            <contact_info>
+                <addresses/>
+                <emails/>
+                <phones/>
+            </contact_info>
+            <admin_info>
+                <online_admin_module>false</online_admin_module>
+                <admin_uri>http://www.brillonline.com/</admin_uri>
+                <admin_uri_type desc="Uri">URI</admin_uri_type>
+                <open_url_compliant>false</open_url_compliant>
+                <incident_log> </incident_log>
+                <admin_documentation> </admin_documentation>
+            </admin_info>
+            <statistics>
+                <user_id> </user_id>
+                <user_password> </user_password>
+                <available>false</available>
+                <delivery_method desc="Email">EMAIL</delivery_method>
+                <format desc="Html">HTML</format>
+                <frequency desc="Monthly">Monthly</frequency>
+                <online_location> </online_location>
+                <delivery_address> </delivery_address>
+                <locally_stored> </locally_stored>
+                <statistics_note> </statistics_note>
+            </statistics>
+            <access_info>
+                <user_id> </user_id>
+                <user_password> </user_password>
+                <user_pass_note> </user_pass_note>
+                <ip_address_reg_method desc="Online">Online</ip_address_reg_method>
+                <ip_address_reg_instructions> </ip_address_reg_instructions>
+                <ip_address_note> </ip_address_note>
+                <access_note> </access_note>
+                <primary_access_uri> http://www.brillonline.com/</primary_access_uri>
+                <interface_uri>http://www.brillonline.com/</interface_uri>
+                <implemented_auth_method desc="IP address">IPaddress</implemented_auth_method>
+                <local_persistent_uri> </local_persistent_uri>
+            </access_info>
+            <interface_notes/>
+        </interface>
+    </interfaces>
+    <contact_info>
+        <addresses/>
+        <emails>
+            <email preferred="true">
+                <email_address>connie.braun@exlibrisgroup.com</email_address>
+                <email_types>
+                    <email_type desc="Claim">claimMail</email_type>
+                    <email_type desc="Order">orderMail</email_type>
+                    <email_type desc="Payment">paymentMail</email_type>
+                    <email_type desc="Queries">queries</email_type>
+                    <email_type desc="Returns">returnsMail</email_type>
+                </email_types>
+            </email>
+        </emails>
+        <phones/>
+        <web_addresses/>
+    </contact_info>
+    <edi_info/>
+    <notes/>
+</vendor>
