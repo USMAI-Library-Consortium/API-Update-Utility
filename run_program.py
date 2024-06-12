@@ -3,6 +3,7 @@ import os
 import logging
 import shutil
 import requests
+import json
 
 from src.read_configuration import read_configuration
 from src.retrieve_resource import retrieve_resources
@@ -10,6 +11,7 @@ from src.backup import Backup
 from src.xml_updater import XMLUpdater
 from src.progress_manager import ProgressManager
 from src.verify_response_content import verify_response_content
+from src.comparator import Comparator
 
 def main(project_name: str):
     project_path = f"projects/{project_name}"
@@ -86,9 +88,14 @@ def main(project_name: str):
                     api_resource.status = "failed"
                     logging.warning(f"Resource {api_resource.identifier} NOT UPDATED SUCCESSFULLY. Status code: {response.status_code}")
                 api_resource.update_response = response.content
+
+            # Compare the resource in the GET to that of the PUT, to see
+            # what changed. 
+            comparator = Comparator(configuration["xpath_of_resource_in_put_response"])
+            with open(f"{project_path}/comparisons.json", "w") as f:
+                json.dump(comparator.compare(api_resources), f, indent=2)
         finally:
             pm.save_state(api_resources)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

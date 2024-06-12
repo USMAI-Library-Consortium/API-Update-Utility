@@ -12,6 +12,9 @@ class Comparator:
     def compare(self, api_resources: list[ApiResource]):
         results: dict = {}
         for api_resource in api_resources:
+            if api_resource.status != "success":
+                continue
+            
             resource_from_put_request = api_resource.update_response
             if self.xpath_of_resource_in_put_response:
                 resource_from_put_request = self.pull_xml_element_from_dict(resource_from_put_request, self.xpath_of_resource_in_put_response)
