@@ -2,6 +2,7 @@
   "xpaths": "REQUIRED",
   "xpathOperations": "update",
   "xpathForGetResponseVerification": "REQUIRED",
+  "xpathOfResourceInPutResponse": null,
   "apiUrlTemplate": "https://example.com/resource/<resource_id>",
   "dryRun": true,
   "requestLimit": -1,

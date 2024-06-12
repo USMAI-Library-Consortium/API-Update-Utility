@@ -32,6 +32,7 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
             "xpaths": unparsed_configuration["xpaths"],
             "xpath_operations": expanded_operations,
             "test_xpath": unparsed_configuration["xpathForGetResponseVerification"],
+            "xpath_of_resource_in_put_response": unparsed_configuration["xpathOfResourceInPutResponse"],
             "dry_run": unparsed_configuration["dryRun"],
             "request_limit": request_limit,
         }

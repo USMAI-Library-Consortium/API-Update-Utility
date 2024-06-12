@@ -2,6 +2,7 @@
   "xpaths": ["test_xpath", "test_xpath_2"],
   "xpathOperations": ["update", "delete"],
   "xpathForGetResponseVerification": "test_verification_xpath",
+  "xpathOfResourceInPutResponse": null,
   "apiUrlTemplate": "https://alma.exlibrisgroup.com/users/<resource_id>",
   "dryRun": true,
   "requestLimit": -1,

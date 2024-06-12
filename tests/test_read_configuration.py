@@ -10,6 +10,7 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(configuration["xpaths"], ["test_xpath"])
         self.assertEqual(configuration["xpath_operations"], ["update"])
         self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
+        self.assertEqual(configuration["xpath_of_resource_in_put_response"], "/status/vendor")
         self.assertEqual(configuration["dry_run"], True)
         self.assertEqual(configuration["request_limit"], None)
 
@@ -33,6 +34,7 @@ class TestReadConfiguration(unittest.TestCase):
 
         self.assertEqual(configuration["xpaths"], ["test_xpath"])
         self.assertEqual(configuration["xpath_operations"], ["update"])
+        self.assertEqual(configuration["xpath_of_resource_in_put_response"], "/status/vendor")
         self.assertEqual(configuration["dry_run"], True)
         self.assertEqual(configuration["request_limit"], None)
 
@@ -54,6 +56,7 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertListEqual(configuration["xpaths"], ["test_xpath", "test_xpath_2"])
         self.assertListEqual(configuration["xpath_operations"], ["update", "delete"])
         self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
+        self.assertEqual(configuration["xpath_of_resource_in_put_response"], None)
         self.assertEqual(configuration["dry_run"], True)
         self.assertEqual(configuration["request_limit"], None)
 
