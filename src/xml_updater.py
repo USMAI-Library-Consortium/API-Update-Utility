@@ -4,6 +4,7 @@ import logging
 
 from .api_resource import ApiResource
 
+
 def default_update_function(resource_id: str, xml_from_get_request: bytes, update_values: list, xpaths: str | None = None, operations: list[str] | None = None) -> bytes:
     tree = etree.fromstring(xml_from_get_request)
 
@@ -13,7 +14,8 @@ def default_update_function(resource_id: str, xml_from_get_request: bytes, updat
                 el_to_update = tree.xpath(xpath)[0]
                 el_to_update.text = update_values[i]
             except:
-                logging.warning(f"Element does not exist on resource {resource_id}. Try the 'updateOrInsert' operation instead.")
+                logging.warning(f"Element does not exist on resource {
+                                resource_id}. Try the 'updateOrInsert' operation instead.")
                 raise KeyError()
         if operations[i] == "updateOrInsert":
             xpath_results = tree.xpath(xpath)
@@ -26,7 +28,7 @@ def default_update_function(resource_id: str, xml_from_get_request: bytes, updat
                 child_el_name = xpath.split("/")[-1]
                 parent_el_xpath = xpath.removesuffix(child_el_name).rstrip("/")
                 parent_el = tree.xpath(parent_el_xpath)[0]
-                
+
                 el_to_add = Element(child_el_name)
                 el_to_add.text = update_values[i]
                 parent_el.insert(-1, el_to_add)
@@ -40,7 +42,8 @@ def default_update_function(resource_id: str, xml_from_get_request: bytes, updat
             for el_to_delete in tree.xpath(f"{xpath}/{update_values[i]}"):
                 el_to_update.remove(el_to_delete)
 
-    return etree.tostring(tree, pretty_print = True)
+    return etree.tostring(tree, pretty_print=True)
+
 
 class XMLUpdater:
     def __init__(self, update_function: callable = default_update_function, xpaths: list[str] | None = None, operations: list[str] | str | None = None):
@@ -52,9 +55,9 @@ class XMLUpdater:
         for api_resource in api_resources:
             if api_resource.status == "pending" and api_resource.xml_from_get_request:
                 try:
-                    api_resource.xml_for_update_request = self.update_function(api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
+                    api_resource.xml_for_update_request = self.update_function(
+                        api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
                 except KeyError:
                     api_resource.status = "failed"
 
         return api_resources
-

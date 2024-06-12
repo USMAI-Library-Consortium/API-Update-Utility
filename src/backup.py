@@ -1,6 +1,7 @@
 import logging
 import os
 
+
 class Backup():
     def __init__(self, project_path: str):
         self.backup_location = f"{project_path}/backups"
@@ -25,14 +26,16 @@ class Backup():
                 f.write(xml_resource)
                 self.files_written += 1
         except Exception as e:
-            logging.error(f"Backup for resource {identifier} failed: {e.__str__()}")
+            logging.error(f"Backup for resource {
+                          identifier} failed: {e.__str__()}")
             return -1
-        
+
         return 0
-    
+
     @staticmethod
     def normalize_identifier(identifier: str):
-        disallowed_chars: set = ("*", "/", "\\", ":", "?", '"', "'", ">", "<", "|", ".")
+        disallowed_chars: set = (
+            "*", "/", "\\", ":", "?", '"', "'", ">", "<", "|", ".")
 
         normalized_identifier = identifier
         for char in disallowed_chars:

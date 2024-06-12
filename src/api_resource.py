@@ -10,4 +10,3 @@ class ApiResource:
         self.xml_from_get_request: bytes = None
         self.xml_for_update_request: bytes = None
         self.update_response: bytes = None
-    

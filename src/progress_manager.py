@@ -3,11 +3,13 @@ import csv
 
 from src.api_resource import ApiResource
 
+
 class ProgressManager:
 
-    def __init__(self, project_path: str, retry_failed: bool=False):
+    def __init__(self, project_path: str, retry_failed: bool = False):
         self.progress_file_name = f"{project_path}/progress.csv"
-        self.previously_completed_api_resources, self.previous_state = self._parse_application_progress(self.progress_file_name, retry_failed=retry_failed)
+        self.previously_completed_api_resources, self.previous_state = self._parse_application_progress(
+            self.progress_file_name, retry_failed=retry_failed)
 
     def save_state(self, api_resources: list[ApiResource]):
         new_state = self._get_new_state(self.previous_state, api_resources)
@@ -36,7 +38,7 @@ class ProgressManager:
                 })
 
         return new_state
-    
+
     @staticmethod
     def _parse_application_progress(progress_file_name: str, retry_failed: bool) -> tuple[list[str], list[dict]]:
         api_resources_finished: list[str] = []
@@ -46,8 +48,9 @@ class ProgressManager:
             reader = csv.DictReader(f)
 
             for row in reader:
-                if retry_failed and row["Status"] == "failed": continue
-                else: 
+                if retry_failed and row["Status"] == "failed":
+                    continue
+                else:
                     previous_state.append({
                         "ID": row["ID"],
                         "Status": row["Status"]
@@ -55,4 +58,3 @@ class ProgressManager:
                     api_resources_finished.append(row["ID"])
 
         return api_resources_finished, previous_state
-

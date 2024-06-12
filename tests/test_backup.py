@@ -2,6 +2,7 @@ import unittest
 
 from src.backup import Backup
 
+
 class TestBackupResource(unittest.TestCase):
 
     def test_normalize_identifier(self):

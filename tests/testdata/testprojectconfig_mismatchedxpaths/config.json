@@ -6,6 +6,7 @@
   "apiUrlTemplate": "https://alma.exlibrisgroup.com/users/<resource_id>",
   "dryRun": true,
   "updateLimit": -1,
+  "retryFailed": false,
   "updateFile": "input.csv",
   "queryParamAPIKey": "apikey=1234"
 }

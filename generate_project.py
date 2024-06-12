@@ -2,18 +2,21 @@ import argparse
 import os
 import json
 
+
 def main(project_name: str):
-    disallowed_chars: set = ("*", "/", "\\", ":", "?", '"', "'", ">", "<", "|", ".", "@")
+    disallowed_chars: set = ("*", "/", "\\", ":", "?",
+                             '"', "'", ">", "<", "|", ".", "@")
 
     for char in disallowed_chars:
         if char in project_name:
-            raise ValueError(f"Project name '{project_name}' includes disallowed characters '{char}'")
+            raise ValueError(f"Project name '{
+                             project_name}' includes disallowed characters '{char}'")
     project_path = f"projects/{project_name}/"
 
     # Check if the project already exists
     if os.path.exists(project_path):
         raise ValueError(f"Project with name '{project_name}' already exists.")
-    
+
     # If the project does not exist, create the folder
     os.makedirs(project_path)
 
@@ -36,9 +39,11 @@ def main(project_name: str):
     with open(f"{project_path}/progress.csv", "w", encoding="utf-8-sig") as prog_f_out:
         prog_f_out.write(progress_file)
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("project_name", help="The name of the project to generate.", type=str)
+    parser.add_argument(
+        "project_name", help="The name of the project to generate.", type=str)
     args = parser.parse_args()
 
     main(args.project_name)

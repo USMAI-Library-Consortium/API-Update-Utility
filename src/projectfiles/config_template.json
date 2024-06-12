@@ -6,6 +6,7 @@
   "apiUrlTemplate": "https://example.com/resource/<resource_id>",
   "dryRun": true,
   "updateLimit": -1,
+  "retryFailed": false,
   "updateFile": "input.csv",
   "queryParamAPIKey": null
 }
