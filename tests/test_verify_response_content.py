@@ -12,8 +12,9 @@ class TestVerifyResponseContent(unittest.TestCase):
 
         test_resource.xml_from_get_request = test_xml
 
-        verified_resources = verify_response_content([test_resource], "/vendor/meta/gracePeriod/days")
-        self.assertEqual(len(verified_resources), 1)
+        api_resources = [test_resource]
+        verified_resources = verify_response_content(api_resources, "/vendor/meta/gracePeriod/days")
+        self.assertEqual(len(api_resources), 1)
 
     def test_simple_verify_response_content_fails(self):
         with open("tests/testdata/xml_resource.xml", "rb") as f:
@@ -22,7 +23,14 @@ class TestVerifyResponseContent(unittest.TestCase):
 
         test_resource.xml_from_get_request = test_xml
 
-        verified_resources = verify_response_content([test_resource], "/vendor/gracePeriod/hours")
+        api_resources = [test_resource]
+        verify_response_content(api_resources, "/vendor/gracePeriod/hours")
         
-        self.assertEqual(len(verified_resources), 1)
-        self.assertEqual(verified_resources[0].status, "failed")
+        self.assertEqual(len(api_resources), 1)
+        self.assertEqual(api_resources[0].status, "failed")
+
+    def test_verify_response_content_pending_no_get_info_passes(self):
+        test_resource = ApiResource("1234", "https://google.com")
+        
+        api_resources = [test_resource]
+        verify_response_content(api_resources, "/vendor/meta/gracePeriod/days")

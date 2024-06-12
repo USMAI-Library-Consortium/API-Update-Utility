@@ -12,7 +12,7 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
         self.assertEqual(configuration["xpath_of_resource_in_put_response"], "/status/vendor")
         self.assertEqual(configuration["dry_run"], True)
-        self.assertEqual(configuration["request_limit"], None)
+        self.assertEqual(configuration["update_limit"], None)
 
         self.assertEqual(api_resources[0].identifier, "19982")
         self.assertEqual(api_resources[1].identifier, "123199")
@@ -36,7 +36,7 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(configuration["xpath_operations"], ["update"])
         self.assertEqual(configuration["xpath_of_resource_in_put_response"], "/status/vendor")
         self.assertEqual(configuration["dry_run"], True)
-        self.assertEqual(configuration["request_limit"], None)
+        self.assertEqual(configuration["update_limit"], None)
 
         self.assertEqual(api_resources[0].identifier, "123199")
         self.assertEqual(api_resources[1].identifier, "23844")
@@ -58,7 +58,7 @@ class TestReadConfiguration(unittest.TestCase):
         self.assertEqual(configuration["test_xpath"], "test_verification_xpath")
         self.assertEqual(configuration["xpath_of_resource_in_put_response"], None)
         self.assertEqual(configuration["dry_run"], True)
-        self.assertEqual(configuration["request_limit"], None)
+        self.assertEqual(configuration["update_limit"], None)
 
         self.assertListEqual(api_resources[0].update_values, ["USA", "20093"])
         self.assertListEqual(api_resources[1].update_values, ["USA", "88283"])

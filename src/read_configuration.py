@@ -8,9 +8,9 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
         with open(f"{project_path}/config.json", "r") as f:
             unparsed_configuration = json.load(f)
 
-        request_limit = None
-        if unparsed_configuration["requestLimit"] > 0:
-            request_limit = unparsed_configuration["requestLimit"]
+        update_limit = None
+        if unparsed_configuration["updateLimit"] > 0:
+            update_limit = unparsed_configuration["updateLimit"]
 
         # If the user just wants to do one type of operation (for example, "update"), then set that operation
         # true for all xpaths by creating an array with the same length as the xpaths.
@@ -34,7 +34,7 @@ def read_configuration(project_path: str, api_resources_finished: list[str]) -> 
             "test_xpath": unparsed_configuration["xpathForGetResponseVerification"],
             "xpath_of_resource_in_put_response": unparsed_configuration["xpathOfResourceInPutResponse"],
             "dry_run": unparsed_configuration["dryRun"],
-            "request_limit": request_limit,
+            "update_limit": update_limit,
         }
 
         api_resources: list[ApiResource] = []

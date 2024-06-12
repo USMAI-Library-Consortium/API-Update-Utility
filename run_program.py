@@ -26,17 +26,17 @@ def main(project_name: str):
     # Get the information from the files
     pm = ProgressManager(project_path)
     configuration, api_resources = read_configuration(f"projects/{project_name}", pm.previously_completed_api_resources)
-    logging.info(f"Request limit: {configuration["request_limit"]}")
+    logging.info(f"Resources to update: {configuration["update_limit"]}")
     logging.info(f"Dry run mode: {configuration["dry_run"]}")
 
     # Retrieve the resources
     logging.info("Beginning API GET retrievals")
-    api_resources = retrieve_resources(api_resources, configuration["request_limit"])
+    api_resources = retrieve_resources(api_resources, configuration["update_limit"])
     logging.info("Done")
 
     # Verify the responses
     logging.info("Beginning response verification...")
-    api_resources = verify_response_content(api_resources, configuration["test_xpath"])
+    verify_response_content(api_resources, configuration["test_xpath"])
     logging.info("Done")
 
     # Backup the responses that passed
@@ -44,7 +44,7 @@ def main(project_name: str):
         logging.info("Beginning backup process...")
         backuper = Backup(project_path=project_path)
         for api_resource in api_resources:
-            if api_resource.status == "pending":
+            if api_resource.status == "pending" and api_resource.xml_from_get_request:
                 result = backuper.backup(api_resource.identifier, api_resource.xml_from_get_request)
                 if result == -1:
                     logging.error(f"Could not back up vendor {api_resource.identifier}")
@@ -70,7 +70,7 @@ def main(project_name: str):
         os.mkdir(dry_run_folder)
         
         for api_resource in api_resources:
-            if api_resource.status == "pending":
+            if api_resource.status == "pending" and api_resource.xml_for_update_request:
                 resource_file_path = f"{dry_run_folder}/{Backup.normalize_identifier(api_resource.identifier)}.xml"
                 with open(resource_file_path, "wb") as f:
                     f.write(api_resource.xml_for_update_request)
@@ -85,19 +85,21 @@ def main(project_name: str):
         session = requests.Session()
         try:
             for api_resource in api_resources:
-                response = session.put(api_resource.api_url, data=api_resource.xml_for_update_request, headers={"Content-Type": "application/xml"})
-                if response.status_code == 200:
-                    api_resource.status = "success"
-                    logging.info(f"Resource {api_resource.identifier} updated successfully.")
-                else:
-                    api_resource.status = "failed"
-                    logging.warning(f"Resource {api_resource.identifier} NOT UPDATED SUCCESSFULLY. Status code: {response.status_code}")
-                api_resource.update_response = response.content
+                # only run on resources that are pending and have XML ready
+                if api_resource.status == "pending" and api_resource.xml_for_update_request:
+                    response = session.put(api_resource.api_url, data=api_resource.xml_for_update_request, headers={"Content-Type": "application/xml"})
+                    if response.status_code == 200:
+                        api_resource.status = "success"
+                        logging.info(f"Resource {api_resource.identifier} updated successfully.")
+                    else:
+                        api_resource.status = "failed"
+                        logging.warning(f"Resource {api_resource.identifier} NOT UPDATED SUCCESSFULLY. Status code: {response.status_code}")
+                    api_resource.update_response = response.content
 
-            # Compare the resource in the GET to that of the PUT, to see
-            # what changed. 
-            with open(f"{project_path}/comparisons.json", "w") as f:
-                json.dump(comparator.compare(api_resources), f, indent=2)
+                # Compare the resource in the GET to that of the PUT, to see
+                # what changed. 
+                with open(f"{project_path}/comparisons.json", "w") as f:
+                    json.dump(comparator.compare(api_resources), f, indent=2)
         finally:
             pm.save_state(api_resources)
 
