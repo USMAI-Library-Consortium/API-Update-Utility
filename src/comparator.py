@@ -19,6 +19,11 @@ class Comparator:
             if self.xpath_of_resource_in_put_response:
                 resource_from_put_request = self.pull_xml_element_from_dict(resource_from_put_request, self.xpath_of_resource_in_put_response)
             diff = DeepDiff(xmltodict.parse(api_resource.xml_from_get_request), xmltodict.parse(resource_from_put_request))
+            
+            # If there is no difference between the two, add the string "No Difference" instead
+            if len(diff.keys()) == 0:
+                diff = "No Difference"
+            
             results[api_resource.identifier] = diff
         
         return results

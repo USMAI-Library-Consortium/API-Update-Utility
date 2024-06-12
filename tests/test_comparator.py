@@ -17,12 +17,12 @@ class TestComparator(unittest.TestCase):
         result = c.compare([api_resource])
 
         self.assertDictEqual(result, {
-            "BRILL": {
-                'values_changed': {
-                    "root['vendor']['status']['@desc']": {'new_value': 'Inactive', 'old_value': 'Active'}, 
-                    "root['vendor']['status']['#text']": {'new_value': 'INACTIVE', 'old_value': 'ACTIVE'}
+                "BRILL": {
+                    'values_changed': {
+                        "root['vendor']['status']['@desc']": {'new_value': 'Inactive', 'old_value': 'Active'}, 
+                        "root['vendor']['status']['#text']": {'new_value': 'INACTIVE', 'old_value': 'ACTIVE'}
+                        }
                     }
-                }
             }
         )
     
@@ -39,12 +39,12 @@ class TestComparator(unittest.TestCase):
         result = c.compare([api_resource])
 
         self.assertDictEqual(result, {
-            "BRILL": {
-                'values_changed': {
-                    "root['vendor']['status']['@desc']": {'new_value': 'Inactive', 'old_value': 'Active'}, 
-                    "root['vendor']['status']['#text']": {'new_value': 'INACTIVE', 'old_value': 'ACTIVE'}
+                "BRILL": {
+                    'values_changed': {
+                        "root['vendor']['status']['@desc']": {'new_value': 'Inactive', 'old_value': 'Active'}, 
+                        "root['vendor']['status']['#text']": {'new_value': 'INACTIVE', 'old_value': 'ACTIVE'}
+                        }
                     }
-                }
             }
         )
 
@@ -55,3 +55,21 @@ class TestComparator(unittest.TestCase):
         result = c.compare([api_resource])
 
         self.assertDictEqual(result, {})
+
+    def test_comparator_no_difference_str_result(self):
+        api_resource = ApiResource("BRILL", "https://url.com")
+        api_resource.status = "success"
+        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+            api_resource.xml_from_get_request = f.read()
+        
+        # Use the same vendor XML again to simulate no change.
+        with open ("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+            api_resource.update_response = f.read()
+
+        c = Comparator()
+        result = c.compare([api_resource])
+
+        self.assertDictEqual(result, {
+                "BRILL": "No Difference"
+            }
+        )
