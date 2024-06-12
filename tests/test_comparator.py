@@ -73,3 +73,26 @@ class TestComparator(unittest.TestCase):
                 "BRILL": "No Difference"
             }
         )
+
+    def test_comparator_dry_run(self):
+        api_resource = ApiResource("BRILL", "https://url.com")
+        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+            api_resource.xml_from_get_request = f.read()
+        
+        # This time we're setting the xml FOR update request, as this is a comparator 
+        # for the dry run
+        with open ("tests/testdata/test_vendor_from_put.xml", "rb") as f:
+            api_resource.xml_for_update_request = f.read()
+
+        c = Comparator(xpath_of_resource_in_put_response=None)
+        result = c.compare([api_resource], dry_run=True)
+
+        self.assertDictEqual(result, {
+                "BRILL": {
+                    'values_changed': {
+                        "root['vendor']['status']['@desc']": {'new_value': 'Inactive', 'old_value': 'Active'}, 
+                        "root['vendor']['status']['#text']": {'new_value': 'INACTIVE', 'old_value': 'ACTIVE'}
+                        }
+                    }
+            }
+        )

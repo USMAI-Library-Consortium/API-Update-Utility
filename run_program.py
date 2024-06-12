@@ -59,6 +59,8 @@ def main(project_name: str):
     api_resources = xu.run(api_resources)
     logging.info("Done")
 
+    comparator = Comparator(configuration["xpath_of_resource_in_put_response"])
+
     if configuration["dry_run"] == True:
         dry_run_folder = f"{project_path}/dryRun"
         logging.info(f"Dry run mode: saving resources to {dry_run_folder}.")
@@ -72,6 +74,9 @@ def main(project_name: str):
                 resource_file_path = f"{dry_run_folder}/{Backup.normalize_identifier(api_resource.identifier)}.xml"
                 with open(resource_file_path, "wb") as f:
                     f.write(api_resource.xml_for_update_request)
+
+        with open(f"{dry_run_folder}/comparisons.json", "w") as f:
+            json.dump(comparator.compare(api_resources, dry_run=True), f, indent=2)
 
         logging.info("Dry run complete.")
         return
@@ -91,7 +96,6 @@ def main(project_name: str):
 
             # Compare the resource in the GET to that of the PUT, to see
             # what changed. 
-            comparator = Comparator(configuration["xpath_of_resource_in_put_response"])
             with open(f"{project_path}/comparisons.json", "w") as f:
                 json.dump(comparator.compare(api_resources), f, indent=2)
         finally:
