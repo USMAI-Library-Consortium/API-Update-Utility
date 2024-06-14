@@ -21,11 +21,11 @@ def main(project_name: str):
     os.makedirs(project_path)
 
     # Move the boilerplate files into the new project
-    with open("src/projectfiles/config_template.json", "r") as f:
-        config = json.load(f)
+    with open("src/projectfiles/project_settings.py", "r") as f:
+        settings_file = f.read()
 
-    with open(f"{project_path}/config.json", "w") as f:
-        json.dump(config, f, indent=2)
+    with open(f"{project_path}/project_settings.py", "w") as f:
+        f.write(settings_file)
 
     with open("src/projectfiles/instructions.txt", "r") as inst_f:
         instructions = inst_f.read()

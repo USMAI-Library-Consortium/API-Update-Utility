@@ -5,7 +5,7 @@ import logging
 from .api_resource import ApiResource
 
 
-def default_update_function(resource_id: str, xml_from_get_request: bytes, update_values: list, xpaths: str | None = None, operations: list[str] | None = None) -> bytes:
+def default_update_function(resource_id: str, xml_from_get_request: bytes, update_values: list | None, xpaths: list[str] | None = None, operations: str | list[str] | None = None) -> bytes:
     tree = etree.fromstring(xml_from_get_request)
 
     for i, xpath in enumerate(xpaths):

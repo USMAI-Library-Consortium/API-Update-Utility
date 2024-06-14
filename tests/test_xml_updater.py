@@ -183,3 +183,29 @@ class TestResourceUpdaterXML(unittest.TestCase):
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
+
+    def test_update_with_custom_function(self):
+        from lxml import etree
+
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
+            xml_resource = f.read()
+
+        with open("tests/testdata/xml/xml_resource_updated_el.xml", "rb") as f:
+            expected_xml_resource = f.read()
+            expected_xml_resource = etree.tostring(etree.fromstring(expected_xml_resource), pretty_print=True)
+
+        test_resource = ApiResource("11224", "https://fakeserver/id", update_values=["title"])   
+        test_resource.xml_from_get_request = xml_resource
+
+        def custom_function(resource_id: str, xml_from_get_request: bytes, update_values: list | None, xpaths: list[str] | None = None, operations: str | list[str] | None = None) -> bytes:    
+            tree = etree.fromstring(xml_from_get_request)
+
+            el_to_update = tree.xpath("/vendor/meta/gracePeriod/days")[0]
+            el_to_update.text = "8"
+
+            return etree.tostring(tree, pretty_print=True)
+        
+        xu = XMLUpdater(custom_function, None, None)
+        result = xu.run([test_resource])
+
+        self.assertEqual(result[0].xml_for_update_request, expected_xml_resource)
