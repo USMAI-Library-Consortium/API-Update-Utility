@@ -5,7 +5,7 @@ import shutil
 import requests
 import json
 
-from src.read_configuration import read_configuration
+from src.get_configuration import get_configuration
 from src.read_input import read_input
 from src.retrieve_resource import retrieve_resources
 from src.backup import Backup
@@ -28,39 +28,39 @@ def main(project_name: str):
     logging.info(f"Project: {project_name}")
 
     # Read the configuration
-    configuration = read_configuration(f"projects/{project_name}")
+    settings = get_configuration(f"projects/{project_name}")
 
     # Initialize the progress manager, which takes care of managing which updates are
     # done, which are in progress, and which have failed.
     pm = ProgressManager(
-        project_path, retry_failed=configuration["retry_failed"])
+        project_path, retry_failed=settings.retry_failed)
 
     # Get the API resources from the CSV, excluding ones that were done previously
     api_resources = read_input(
-        configuration, pm.previously_completed_api_resources)
+        settings, pm.previously_completed_api_resources)
 
     if len(api_resources) == 0:
         logging.info(f"Exiting - no resources to update.{
-                     " (retryFailed is set to false, there may be failed resources. Check 'progress.csv')" if not configuration["retry_failed"] else " Congrats!"}")
+                     " (retryFailed is set to false, there may be failed resources. Check 'progress.csv')" if not settings.retry_failed else " Congrats!"}")
         return
 
     # Log some basic init information
-    logging.info(f"Resources to update: {configuration["update_limit"]}")
-    logging.info(f"Dry run mode: {configuration["dry_run"]}")
+    logging.info(f"Resources to update: {settings.update_limit}")
+    logging.info(f"Dry run mode: {settings.dry_run}")
 
     # Retrieve the resources
     logging.info("Beginning API GET retrievals")
     api_resources = retrieve_resources(
-        api_resources, configuration["update_limit"])
+        api_resources, settings.update_limit)
     logging.info("Done")
 
     # Verify the responses
     logging.info("Beginning GET response verification...")
-    verify_response_content(api_resources, configuration["test_xpath"])
+    verify_response_content(api_resources, settings.xpath_for_get_response_verification)
     logging.info("Done")
 
     # Backup the responses that passed
-    if configuration["dry_run"] == False:
+    if settings.dry_run == False:
         logging.info("Beginning backup process...")
         backuper = Backup(project_path=project_path)
         for api_resource in api_resources:
@@ -78,14 +78,14 @@ def main(project_name: str):
 
     # Update the XML bodies
     logging.info("Beginning body update process...")
-    xu = XMLUpdater(
-        xpaths=configuration["xpaths"], operations=configuration["xpath_operations"])
+    xu = XMLUpdater(update_function=settings.custom_xml_update_function if settings.use_custom_xml_update_function else None,
+                    xpaths=settings.xpath, operations=settings.xpath_operations)
     api_resources = xu.run(api_resources)
     logging.info("Done")
 
-    comparator = Comparator(configuration["xpath_of_resource_in_put_response"])
+    comparator = Comparator(settings.xpath_of_resource_in_put_response)
 
-    if configuration["dry_run"] == True:
+    if settings.dry_run == True:
         dry_run_folder = f"{project_path}/dryRun"
         logging.info(f"Dry run mode: saving resources to {dry_run_folder}.")
         # Reset dry run folder

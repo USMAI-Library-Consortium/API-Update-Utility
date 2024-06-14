@@ -12,13 +12,13 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xpaths=["/vendor/meta/gracePeriod/days"], operations=["update"])
         test_resource = ApiResource("11224", "https://fakeserver/id", ["8"])
 
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
 
-        with open("tests/testdata/xml_resource_updated_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_updated_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -32,13 +32,13 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xpaths=["/vendor/meta/gracePeriod/days"], operations=["updateOrInsert"])
         test_resource = ApiResource("11224", "https://fakeserver/id", ["8"])
 
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
 
-        with open("tests/testdata/xml_resource_updated_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_updated_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -52,13 +52,13 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xpaths=["/vendor/meta/gracePeriod/hours"], operations=["updateOrInsert"])
         test_resource = ApiResource("11224", "https://fakeserver/id", ["12"])
 
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
 
-        with open("tests/testdata/xml_resource_inserted_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_inserted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -73,12 +73,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", ["<hours>12</hours>"])
 
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
-        with open("tests/testdata/xml_resource_inserted_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_inserted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -92,12 +92,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", update_values=["gracePeriod"])
 
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
-        with open("tests/testdata/xml_resource_deleted_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_deleted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -112,12 +112,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", update_values=["hours"])
 
-        with open("tests/testdata/xml_resource_inserted_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_inserted_el.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -132,12 +132,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", update_values=["*"])
 
-        with open("tests/testdata/xml_resource_inserted_el.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_inserted_el.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
-        with open("tests/testdata/xml_resource_children_removed.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_children_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -151,12 +151,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", update_values=["title[2]"])
 
-        with open("tests/testdata/xml_resource_with_list.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_with_list.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
-        with open("tests/testdata/xml_resource_with_list_middle_removed.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_with_list_middle_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
@@ -170,12 +170,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", update_values=["title"])
 
-        with open("tests/testdata/xml_resource_with_list.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_with_list.xml", "rb") as f:
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
         updated_resources = xu.run([test_resource])
-        with open("tests/testdata/xml_resource_with_list_removed.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource_with_list_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(

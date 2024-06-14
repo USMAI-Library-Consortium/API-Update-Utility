@@ -8,10 +8,10 @@ class TestComparator(unittest.TestCase):
     def test_comparison_format_correct(self):
         api_resource = ApiResource("BRILL", "https://url.com")
         api_resource.status = "success"
-        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
             api_resource.xml_from_get_request = f.read()
 
-        with open("tests/testdata/test_vendor_from_put.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_put.xml", "rb") as f:
             api_resource.update_response = f.read()
 
         c = Comparator(xpath_of_resource_in_put_response=None)
@@ -30,10 +30,10 @@ class TestComparator(unittest.TestCase):
     def test_comparator_resource_nested(self):
         api_resource = ApiResource("BRILL", "https://url.com")
         api_resource.status = "success"
-        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
             api_resource.xml_from_get_request = f.read()
 
-        with open("tests/testdata/test_vendor_from_put_nested.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_put_nested.xml", "rb") as f:
             api_resource.update_response = f.read()
 
         c = Comparator(xpath_of_resource_in_put_response="/results/vendor")
@@ -60,11 +60,11 @@ class TestComparator(unittest.TestCase):
     def test_comparator_no_difference_str_result(self):
         api_resource = ApiResource("BRILL", "https://url.com")
         api_resource.status = "success"
-        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
             api_resource.xml_from_get_request = f.read()
 
         # Use the same vendor XML again to simulate no change.
-        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
             api_resource.update_response = f.read()
 
         c = Comparator()
@@ -77,12 +77,12 @@ class TestComparator(unittest.TestCase):
 
     def test_comparator_dry_run(self):
         api_resource = ApiResource("BRILL", "https://url.com")
-        with open("tests/testdata/test_vendor_from_get.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
             api_resource.xml_from_get_request = f.read()
 
         # This time we're setting the xml FOR update request, as this is a comparator
         # for the dry run
-        with open("tests/testdata/test_vendor_from_put.xml", "rb") as f:
+        with open("tests/testdata/xml/test_vendor_from_put.xml", "rb") as f:
             api_resource.xml_for_update_request = f.read()
 
         c = Comparator(xpath_of_resource_in_put_response=None)

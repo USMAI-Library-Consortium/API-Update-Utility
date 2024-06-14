@@ -1,17 +1,14 @@
 import unittest 
+import importlib
 
 from src.read_input import read_input
 
 class TestReadInput(unittest.TestCase):
 
     def test_read_input(self):
-        configuration = {
-            "update_file": "tests/testdata/testprojectconfig/input.csv",
-            "api_url_template": "https://alma.exlibrisgroup.com/users/<resource_id>",
-            "query_param_api_key": "apikey=1234",
-            "xpaths": ["test_xpath"]
-        }
-        api_resources = read_input(configuration, api_resources_finished=[])
+        settings = importlib.import_module("tests.testdata.proj_basic.project_settings")
+        settings.update_file = "tests/testdata/proj_basic/input.csv"
+        api_resources = read_input(settings, api_resources_finished=[])
 
         self.assertEqual(api_resources[0].identifier, "19982")
         self.assertEqual(api_resources[1].identifier, "123199")
@@ -29,13 +26,9 @@ class TestReadInput(unittest.TestCase):
         self.assertEqual(api_resources[3].update_values[0], "Chile")
 
     def test_read_configuration_with_previously_completed_values(self):
-        configuration = {
-            "update_file": "tests/testdata/testprojectconfig/input.csv",
-            "api_url_template": "https://alma.exlibrisgroup.com/users/<resource_id>",
-            "query_param_api_key": "apikey=1234",
-            "xpaths": ["test_xpath"]
-        }
-        api_resources = read_input(configuration, api_resources_finished=["19982"])
+        settings = importlib.import_module("tests.testdata.proj_basic.project_settings")
+        settings.update_file = "tests/testdata/proj_basic/input.csv"
+        api_resources = read_input(settings, api_resources_finished=["19982"])
 
         self.assertEqual(api_resources[0].identifier, "123199")
         self.assertEqual(api_resources[1].identifier, "23844")
@@ -50,13 +43,9 @@ class TestReadInput(unittest.TestCase):
         self.assertEqual(api_resources[2].update_values[0], "Chile")
 
     def test_read_configuration_multiple_xpaths(self):
-        configuration = {
-            "update_file": "tests/testdata/testprojectconfig_multiplexpaths/input.csv",
-            "api_url_template": "https://alma.exlibrisgroup.com/users/<resource_id>",
-            "query_param_api_key": "apikey=1234",
-            "xpaths": ["test_xpath", "test_xpath_2"]
-        }
-        api_resources = read_input(configuration, api_resources_finished=[])
+        settings = importlib.import_module("tests.testdata.proj_multiple_xpaths.project_settings")
+        settings.update_file = "tests/testdata/proj_multiple_xpaths/input.csv"
+        api_resources = read_input(settings, api_resources_finished=[])
 
         self.assertListEqual(api_resources[0].update_values, ["USA", "20093"])
         self.assertListEqual(api_resources[1].update_values, ["USA", "88283"])
@@ -65,11 +54,18 @@ class TestReadInput(unittest.TestCase):
 
     def test_read_input_mismatched_xpaths_and_values(self):
         """There should be the same number of values and xpaths"""
-        configuration = {
-            "update_file": "tests/testdata/testprojectconfig_mismatchedxpaths/input.csv",
-            "api_url_template": "https://alma.exlibrisgroup.com/users/<resource_id>",
-            "query_param_api_key": "apikey=1234",
-            "xpaths": ["test_xpath"]
-        }
+        settings = importlib.import_module("tests.testdata.proj_mismatched_xpaths.project_settings")
+        settings.update_file = "tests/testdata/proj_mismatched_xpaths/input.csv"
+        settings.use_custom_xml_update_function = False
         with self.assertRaises(ValueError):
-            read_input(configuration, [])
+            read_input(settings, [])
+
+    def test_read_input_mismatched_xpath_and_values_custom_function_no_error(self):
+        """We should be able to put whatever combo of xpaths and values when we use a custom function"""
+        """There should be the same number of values and xpaths"""
+        settings = importlib.import_module("tests.testdata.proj_mismatched_xpaths.project_settings")
+        settings.update_file = "tests/testdata/proj_mismatched_xpaths/input.csv"
+        settings.use_custom_xml_update_function = True
+        
+        # Just assert there's no errors thrown
+        read_input(settings, [])

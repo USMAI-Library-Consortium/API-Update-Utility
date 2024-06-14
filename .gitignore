@@ -8,6 +8,7 @@
 
 # Program
 /projects/*
+*test_test_read_settings.py
 
 # Packaging
 dist

@@ -7,7 +7,7 @@ from src.verify_response_content import verify_response_content
 class TestVerifyResponseContent(unittest.TestCase):
 
     def test_simple_verify_response_content_passes(self):
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             test_xml = f.read()
         test_resource = ApiResource("1234", "https://google.com")
 
@@ -19,7 +19,7 @@ class TestVerifyResponseContent(unittest.TestCase):
         self.assertEqual(len(api_resources), 1)
 
     def test_simple_verify_response_content_fails(self):
-        with open("tests/testdata/xml_resource.xml", "rb") as f:
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             test_xml = f.read()
         test_resource = ApiResource("1234", "https://google.com")
 

@@ -46,8 +46,10 @@ def default_update_function(resource_id: str, xml_from_get_request: bytes, updat
 
 
 class XMLUpdater:
-    def __init__(self, update_function: callable = default_update_function, xpaths: list[str] | None = None, operations: list[str] | str | None = None):
-        self.update_function = update_function
+    def __init__(self, update_function: callable = None, xpaths: list[str] | None = None, operations: list[str] | str | None = None):
+        if update_function == None:
+            self.update_function = default_update_function
+        else: self.update_function = update_function
         self.xpaths = xpaths
         self.operations = operations
 

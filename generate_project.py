@@ -39,6 +39,9 @@ def main(project_name: str):
     with open(f"{project_path}/progress.csv", "w", encoding="utf-8-sig") as prog_f_out:
         prog_f_out.write(progress_file)
 
+    with open(f"{project_path}/__init__.py", "w") as f:
+        f.write("")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
