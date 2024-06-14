@@ -14,7 +14,7 @@ class TestComparator(unittest.TestCase):
         with open("tests/testdata/xml/test_vendor_from_put.xml", "rb") as f:
             api_resource.update_response = f.read()
 
-        c = Comparator(xpath_of_resource_in_put_response=None)
+        c = Comparator(xpath_of_resource_in_put_response="/vendor")
         result = c.compare([api_resource])
 
         self.assertDictEqual(result, {

@@ -130,12 +130,15 @@ def main(project_name: str):
 
             # Compare the resource in the GET to that of the PUT, to see
             # what changed.
-            logging.info("Beginning comparison of GET / PUT responses...")
-            with open(f"{project_path}/comparisons.json", "w") as f:
-                logging.info(f"Saving comparison to {
-                             project_path}/comparisons.json")
-                json.dump(comparator.compare(api_resources), f, indent=2)
-                logging.info("Done.")
+            if settings.xpath_of_resource_in_put_response:
+                logging.info("Beginning comparison of GET / PUT responses...")
+                with open(f"{project_path}/comparisons.json", "w") as f:
+                    logging.info(f"Saving comparison to {
+                                project_path}/comparisons.json")
+                    json.dump(comparator.compare(api_resources), f, indent=2)
+                    logging.info("Done.")
+            else:
+                print("Skipping Comparator - no 'xpath_of_resource_in_put_response'")
         finally:
             logging.info("Saving state...")
             pm.save_state(api_resources)
