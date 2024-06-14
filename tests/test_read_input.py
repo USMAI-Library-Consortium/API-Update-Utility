@@ -1,13 +1,12 @@
 import unittest 
-import importlib
 
 from src.read_input import read_input
+from src.get_configuration import get_configuration
 
 class TestReadInput(unittest.TestCase):
 
     def test_read_input(self):
-        settings = importlib.import_module("tests.testdata.proj_basic.project_settings")
-        settings.update_file = "tests/testdata/proj_basic/input.csv"
+        settings = get_configuration("tests/testdata/proj_basic")
         api_resources = read_input(settings, api_resources_finished=[])
 
         self.assertEqual(api_resources[0].identifier, "19982")
@@ -26,8 +25,7 @@ class TestReadInput(unittest.TestCase):
         self.assertEqual(api_resources[3].update_values[0], "Chile")
 
     def test_read_configuration_with_previously_completed_values(self):
-        settings = importlib.import_module("tests.testdata.proj_basic.project_settings")
-        settings.update_file = "tests/testdata/proj_basic/input.csv"
+        settings = get_configuration("tests/testdata/proj_basic")
         api_resources = read_input(settings, api_resources_finished=["19982"])
 
         self.assertEqual(api_resources[0].identifier, "123199")
@@ -43,8 +41,7 @@ class TestReadInput(unittest.TestCase):
         self.assertEqual(api_resources[2].update_values[0], "Chile")
 
     def test_read_configuration_multiple_xpaths(self):
-        settings = importlib.import_module("tests.testdata.proj_multiple_xpaths.project_settings")
-        settings.update_file = "tests/testdata/proj_multiple_xpaths/input.csv"
+        settings = get_configuration("tests/testdata/proj_multiple_xpaths")
         api_resources = read_input(settings, api_resources_finished=[])
 
         self.assertListEqual(api_resources[0].update_values, ["USA", "20093"])
@@ -54,18 +51,15 @@ class TestReadInput(unittest.TestCase):
 
     def test_read_input_mismatched_xpaths_and_values(self):
         """There should be the same number of values and xpaths"""
-        settings = importlib.import_module("tests.testdata.proj_mismatched_xpaths.project_settings")
-        settings.update_file = "tests/testdata/proj_mismatched_xpaths/input.csv"
-        settings.use_custom_xml_update_function = False
+        settings = get_configuration("tests/testdata/proj_mismatched_xpaths")
         with self.assertRaises(ValueError):
             read_input(settings, [])
 
     def test_read_input_mismatched_xpath_and_values_custom_function_no_error(self):
         """We should be able to put whatever combo of xpaths and values when we use a custom function"""
         """There should be the same number of values and xpaths"""
-        settings = importlib.import_module("tests.testdata.proj_mismatched_xpaths.project_settings")
-        settings.update_file = "tests/testdata/proj_mismatched_xpaths/input.csv"
-        settings.use_custom_xml_update_function = True
+        settings = get_configuration("tests/testdata/proj_mismatched_xpaths_custom_function")
+        print(settings.use_custom_xml_update_function)
         
         # Just assert there's no errors thrown
         read_input(settings, [])
