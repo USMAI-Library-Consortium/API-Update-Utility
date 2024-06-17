@@ -2,6 +2,7 @@ import lxml.etree
 import xmltodict
 from deepdiff.diff import DeepDiff
 import lxml
+import logging
 
 from .api_resource import ApiResource
 
@@ -27,10 +28,12 @@ class Comparator:
                 
                 updated_resource = api_resource.update_response
                 if self.xpath_of_resource_in_put_response:
-                    updated_resource = self.pull_xml_element_from_dict(updated_resource, self.xpath_of_resource_in_put_response)
-
-            if not updated_resource:
-                continue
+                    try:
+                        updated_resource = self.pull_xml_element_from_dict(updated_resource, self.xpath_of_resource_in_put_response, api_resource.identifier)
+                    except ValueError as ve:
+                        logging.exception(ve.__str__())
+                        results[api_resource.identifier] = ve.__str__()
+                        continue
 
             diff = DeepDiff(xmltodict.parse(api_resource.xml_from_get_request), xmltodict.parse(updated_resource))
             
@@ -43,12 +46,12 @@ class Comparator:
         return results
     
     @staticmethod
-    def pull_xml_element_from_dict(xml: bytes, xpath: str) -> bytes:
+    def pull_xml_element_from_dict(xml: bytes, xpath: str, identifier: str) -> bytes:
         tree: lxml.etree._ElementTree = lxml.etree.fromstring(xml)
         
         try:
             resource = tree.xpath(xpath)[0]
         except IndexError:
-            raise ValueError(f"Xpath for finding resource in PUT request is not valid: {xpath}")
+            raise ValueError(f"Could not find xpath '{xpath}' in PUT response for resource '{identifier}'; skipping comparison.")
 
         return lxml.etree.tostring(resource, pretty_print=True)

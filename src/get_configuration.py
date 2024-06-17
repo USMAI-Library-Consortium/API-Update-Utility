@@ -20,7 +20,6 @@ class Settings:
         self.custom_xml_update_function: callable = None
 
 
-
 def get_configuration(project_path: str):
     project_settings = importlib.import_module(f"{project_path.replace("/", ".")}.project_settings") # type: ignore
 
@@ -32,18 +31,22 @@ def get_configuration(project_path: str):
     # true for all xpaths by creating an array with the same length as the xpaths.
     expanded_operations = []
     if isinstance(project_settings.xpath_operations, list):
-        number_of_xpath_operations = len(project_settings.xpath_operations)
-        number_of_xpaths = len(project_settings.xpaths)
-        if number_of_xpath_operations != number_of_xpaths:
-            raise ValueError(
-                "If you include an array of xpathOperations, it must be equal to the number of xpaths.")
+        if not project_settings.use_custom_xml_update_function:
+            number_of_xpath_operations = len(project_settings.xpath_operations)
+            number_of_xpaths = len(project_settings.xpaths)
+            if number_of_xpath_operations != number_of_xpaths:
+                raise ValueError(
+                    "If you include an array of xpathOperations, it must be equal to the number of xpaths.")
 
         expanded_operations = project_settings.xpath_operations
-    else:
+    elif isinstance(project_settings.xpath_operations, str):
         operation_to_do_for_all_xpaths = project_settings.xpath_operations
 
-        for _ in range(0, len(project_settings.xpaths)):
+        number_of_operations = len(project_settings.xpaths) if isinstance(project_settings.xpaths, list) else 1
+
+        for _ in range(0, number_of_operations):
             expanded_operations.append(operation_to_do_for_all_xpaths)
+    else: expanded_operations = None
 
     settings = Settings()
     settings.update_file = f"{project_path}/{project_settings.update_file}"

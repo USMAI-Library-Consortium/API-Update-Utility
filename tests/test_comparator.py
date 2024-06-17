@@ -72,8 +72,54 @@ class TestComparator(unittest.TestCase):
 
         self.assertDictEqual(result, {
             "BRILL": "No Difference"
-        }
-        )
+        })
+
+    def test_comparator_one_resource_failed_xpath(self):
+        """If the xpath of the resource could not be found (this is likely due to an 
+        error message slipping through or a wrong user-inputted xpath), say so in the returned dict but continue processing."""
+        c = Comparator(xpath_of_resource_in_put_response="/vendor")
+
+        # This one should show no change
+        api_resource_1 = ApiResource("RESOURCE_1", "https://url.com")
+        api_resource_1.status = "success"
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
+            api_resource_1.xml_from_get_request = f.read()
+
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
+            api_resource_1.update_response = f.read()
+
+        # This resource has the wrong xpath.
+        api_resource_2 = ApiResource("RESOURCE_2", "https://url.com")
+        api_resource_2.status = "success"
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
+            api_resource_2.xml_from_get_request = f.read()
+
+        with open("tests/testdata/xml/test_error_message.xml", "rb") as f:
+            api_resource_2.update_response = f.read()
+
+        # This one should show a change.
+        api_resource_3 = ApiResource("BRILL", "https://url.com")
+        api_resource_3.status = "success"
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
+            api_resource_3.xml_from_get_request = f.read()
+
+        with open("tests/testdata/xml/test_vendor_from_put.xml", "rb") as f:
+            api_resource_3.update_response = f.read()
+
+        result = c.compare([api_resource_1, api_resource_2, api_resource_3])
+        print(result)
+
+        self.assertDictEqual(result, {
+            "RESOURCE_1": "No Difference",
+            "RESOURCE_2": "Could not find xpath '/vendor' in PUT response for resource 'RESOURCE_2'; skipping comparison.",
+            "BRILL": {
+                'values_changed': {
+                    "root['vendor']['status']['@desc']": {'new_value': 'Inactive', 'old_value': 'Active'},
+                    "root['vendor']['status']['#text']": {'new_value': 'INACTIVE', 'old_value': 'ACTIVE'}
+                }
+            }
+        })
+
 
     def test_comparator_dry_run(self):
         api_resource = ApiResource("BRILL", "https://url.com")

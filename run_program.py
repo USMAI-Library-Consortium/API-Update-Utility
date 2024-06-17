@@ -37,7 +37,7 @@ def main(project_name: str):
 
     # Get the API resources from the CSV, excluding ones that were done previously
     api_resources = read_input(
-        settings, pm.previously_completed_api_resources)
+        settings, api_resources_to_exclude=pm.previously_completed_api_resources)
 
     if len(api_resources) == 0:
         logging.info(f"Exiting - no resources to update.{
@@ -101,8 +101,7 @@ def main(project_name: str):
                     f.write(api_resource.xml_for_update_request)
 
         with open(f"{dry_run_folder}/comparisons.json", "w") as f:
-            json.dump(comparator.compare(
-                api_resources, dry_run=True), f, indent=2)
+            json.dump(comparator.compare(api_resources, dry_run=True), f, indent=2)
 
         logging.info("Dry run complete.")
         return
