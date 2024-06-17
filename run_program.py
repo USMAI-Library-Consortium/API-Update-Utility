@@ -79,7 +79,7 @@ def main(project_name: str):
     # Update the XML bodies
     logging.info("Beginning body update process...")
     xu = XMLUpdater(update_function=settings.custom_xml_update_function if settings.use_custom_xml_update_function else None,
-                    xpaths=settings.xpath, operations=settings.xpath_operations)
+                    xpaths=settings.xpaths, operations=settings.xpath_operations)
     api_resources = xu.run(api_resources)
     logging.info("Done")
 

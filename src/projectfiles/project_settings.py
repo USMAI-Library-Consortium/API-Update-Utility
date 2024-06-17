@@ -3,6 +3,7 @@ update_file: str = "input.csv"
 xpath_for_get_response_verification: str = "REQUIRED"
 # You MUST include the string '<resource_id> where you want the resource ID to be substituted'
 api_url_template: str = "https://example.com/resource/<resource_id>"
+query_param_api_key: str | None = "apikey=1234"
 
 # REQUIRED unless using a custom XML update function
 xpaths: list[str] | None = "REQUIRED"
