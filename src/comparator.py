@@ -14,16 +14,30 @@ class Comparator:
         results: dict = {}
         for api_resource in api_resources:
             updated_resource = None
+
+            
+
             if dry_run:
                 # Only run the process for api resources that are pending (failed would indicate
                 # the GET response failed or updating the body XML failed)
                 if api_resource.status != "pending":
                     continue
+
+                if not api_resource.xml_for_update_request:
+                    if api_resource.xml_from_get_request:
+                        results[api_resource.identifier] = "Update will not be performed."
+                    
+                    continue
+
                 updated_resource = api_resource.xml_for_update_request
             else:
                 # Production run
                 # Only run the process for api resources that were updated successfully
                 if api_resource.status != "success":
+                    continue
+
+                if not api_resource.xml_for_update_request:
+                    results[api_resource.identifier] = "Update was not run; XML update returned empty update body."
                     continue
                 
                 updated_resource = api_resource.update_response

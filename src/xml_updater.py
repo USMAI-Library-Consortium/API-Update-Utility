@@ -5,7 +5,7 @@ import logging
 from .api_resource import ApiResource
 
 
-def default_update_function(resource_id: str, xml_from_get_request: bytes, update_values: list | None, xpaths: list[str] | None = None, operations: str | list[str] | None = None) -> bytes:
+def default_update_function(resource_id: str, xml_from_get_request: bytes, update_values: list | None, xpaths: list[str] | None = None, operations: str | list[str] | None = None) -> bytes | None:
     tree = etree.fromstring(xml_from_get_request)
 
     for i, xpath in enumerate(xpaths):
@@ -57,8 +57,14 @@ class XMLUpdater:
         for api_resource in api_resources:
             if api_resource.status == "pending" and api_resource.xml_from_get_request:
                 try:
-                    api_resource.xml_for_update_request = self.update_function(
+                    updated_xml = self.update_function(
                         api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
+                    
+                    if updated_xml:
+                        api_resource.xml_for_update_request = updated_xml
+                    else:
+                        logging.info(f"Skipping update request for resource '{api_resource.identifier}' because the XML update function returned nothing. Marking it as complete.")
+                        api_resource.status = "success"
                 except KeyError:
                     api_resource.status = "failed"
 
