@@ -1,9 +1,10 @@
 import lxml.etree
 import xmltodict
+import json
 from deepdiff.diff import DeepDiff
 import lxml
 import logging
-
+from deepdiff.model import PrettyOrderedSet
 from .api_resource import ApiResource
 
 class Comparator:
@@ -50,6 +51,9 @@ class Comparator:
                         continue
 
             diff = DeepDiff(xmltodict.parse(api_resource.xml_from_get_request), xmltodict.parse(updated_resource))
+            if diff: 
+                diff = diff.to_json()
+                diff = json.loads(diff)
             
             # If there is no difference between the two, add the string "No Difference" instead
             if len(diff.keys()) == 0:

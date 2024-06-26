@@ -72,7 +72,7 @@ def main(project_name: str):
                                   api_resource.identifier}")
                     api_resource.status = "failed"
             else:
-                logging.info(f"Skipping backup of resource {
+                logging.debug(f"Skipping backup of resource {
                              api_resource.identifier} due to status '{api_resource.status}'.")
         logging.info("Done")
 

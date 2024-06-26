@@ -1,0 +1,14 @@
+{
+  "BRILL": {
+    "values_changed": {
+      "root['vendor']['status']['@desc']": {
+        "new_value": "Inactive",
+        "old_value": "Active"
+      },
+      "root['vendor']['status']['#text']": {
+        "new_value": "INACTIVE",
+        "old_value": "ACTIVE"
+      }
+    }
+  }
+}
