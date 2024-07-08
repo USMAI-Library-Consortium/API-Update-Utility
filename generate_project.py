@@ -1,7 +1,5 @@
 import argparse
 import os
-import json
-
 
 def main(project_name: str):
     disallowed_chars: set = ("*", "/", "\\", ":", "?",
