@@ -53,19 +53,18 @@ class XMLUpdater:
         self.xpaths = xpaths
         self.operations = operations
 
-    def run(self, api_resources: list[ApiResource]) -> list[ApiResource]:
-        for api_resource in api_resources:
-            if api_resource.status == "pending" and api_resource.xml_from_get_request:
-                try:
-                    updated_xml = self.update_function(
-                        api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
-                    
-                    if updated_xml:
-                        api_resource.xml_for_update_request = updated_xml
-                    else:
-                        logging.info(f"Skipping update request for resource '{api_resource.identifier}' because the XML update function returned nothing. Marking it as complete.")
-                        api_resource.status = "success"
-                except KeyError:
-                    api_resource.status = "failed"
+    def update_resource(self, api_resource: ApiResource) -> ApiResource:
+        if api_resource.status == "pending" and api_resource.xml_from_get_request:
+            try:
+                updated_xml = self.update_function(
+                    api_resource.identifier, api_resource.xml_from_get_request, api_resource.update_values, self.xpaths, self.operations)
+                
+                if updated_xml:
+                    api_resource.xml_for_update_request = updated_xml
+                else:
+                    logging.info(f"Skipping update request for resource '{api_resource.identifier}' because the XML update function returned nothing. Marking it as complete.")
+                    api_resource.status = "success"
+            except KeyError:
+                api_resource.status = "failed"
 
-        return api_resources
+        return api_resource

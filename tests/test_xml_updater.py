@@ -16,13 +16,13 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
 
         with open("tests/testdata/xml/xml_resource_updated_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -36,13 +36,13 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
 
         with open("tests/testdata/xml/xml_resource_updated_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -56,13 +56,13 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
 
         with open("tests/testdata/xml/xml_resource_inserted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -77,12 +77,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
         with open("tests/testdata/xml/xml_resource_inserted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -96,12 +96,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
         with open("tests/testdata/xml/xml_resource_deleted_el.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -116,12 +116,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
         with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -136,12 +136,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
         with open("tests/testdata/xml/xml_resource_children_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -155,12 +155,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
         with open("tests/testdata/xml/xml_resource_with_list_middle_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -174,12 +174,12 @@ class TestResourceUpdaterXML(unittest.TestCase):
             xml_resource = f.read()
         test_resource.xml_from_get_request = xml_resource
 
-        updated_resources = xu.run([test_resource])
+        updated_resource = xu.update_resource(test_resource)
         with open("tests/testdata/xml/xml_resource_with_list_removed.xml", "rb") as f:
             expected_xml_resource = f.read()
 
         real_xml_dict = xmltodict.parse(
-            updated_resources[0].xml_for_update_request)
+            updated_resource.xml_for_update_request)
         expected_xml_dict = xmltodict.parse(expected_xml_resource)
 
         self.assertDictEqual(real_xml_dict, expected_xml_dict)
@@ -206,6 +206,6 @@ class TestResourceUpdaterXML(unittest.TestCase):
             return etree.tostring(tree, pretty_print=True)
         
         xu = XMLUpdater(custom_function, None, None)
-        result = xu.run([test_resource])
+        result = xu.update_resource(test_resource)
 
-        self.assertEqual(result[0].xml_for_update_request, expected_xml_resource)
+        self.assertEqual(result.xml_for_update_request, expected_xml_resource)
