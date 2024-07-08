@@ -141,8 +141,22 @@ def main(project_name: str):
             else:
                 # Do the comparison for the dry run
                 logging.info("Beginning comparator...")
+
+                # We want the comparisons to carry over from production run to production
+                # run, so read the old ones first if they exist. 
+                try:
+                    with open(f"{dry_run_folder}/comparisons.json", "r") as f:
+                        old_comparisons = json.load(f)
+                except FileNotFoundError:
+                    old_comparisons = None
+
                 with open(f"{dry_run_folder}/comparisons.json", "w") as f:
-                    json.dump(comparator.compare(api_resources, dry_run=True), f, indent=2)
+                    comparisons = comparator.compare(api_resources, dry_run=True)
+                    # Append the comparisons to the old comparisons if there is such
+                    # thing as the old comparisons.
+                    if old_comparisons:
+                        comparisons = old_comparisons | comparisons
+                    json.dump(comparisons, f, indent=2)
                 logging.info("Done.")
         except Exception as e:
             logging.exception(e.__str__())
