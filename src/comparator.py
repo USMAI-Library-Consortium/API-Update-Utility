@@ -16,8 +16,6 @@ class Comparator:
         for api_resource in api_resources:
             updated_resource = None
 
-            
-
             if dry_run:
                 # Only run the process for api resources that are pending (failed would indicate
                 # the GET response failed or updating the body XML failed)
