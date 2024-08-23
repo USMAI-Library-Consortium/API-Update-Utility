@@ -1,6 +1,7 @@
 from lxml import etree
 from lxml.etree import Element
 import logging
+import xmltodict
 
 from .api_resource import ApiResource
 
@@ -84,7 +85,9 @@ def default_update_function(resource_id: str, xml_from_get_request: bytes, updat
                 for el_to_delete in tree.xpath(f"{xpath}{index}{"/" if not xpath_of_el_to_delete.startswith("/") else ""}{xpath_of_el_to_delete}"):
                     el_to_update.remove(el_to_delete)
 
-    return etree.tostring(tree, pretty_print=True)
+    updated_xml = etree.tostring(tree, pretty_print=True)
+    update_function_changed_things: bool = xmltodict.parse(xml_from_get_request) != xmltodict.parse(updated_xml)
+    return updated_xml if update_function_changed_things else None
 
 
 class XMLUpdater:

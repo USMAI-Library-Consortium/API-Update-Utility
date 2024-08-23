@@ -4,14 +4,33 @@ import json
 from deepdiff.diff import DeepDiff
 import lxml
 import logging
+import os
+
 from .api_resource import ApiResource
 
 class Comparator:
     def __init__(self, xpath_of_resource_in_put_response: str | None = None):
         self.xpath_of_resource_in_put_response = xpath_of_resource_in_put_response
 
-    def compare(self, api_resources: list[ApiResource], dry_run: bool=False) -> dict:
-        results: dict = {}
+    @staticmethod
+    def get_past_comparisons(comparison_filepath: str) -> dict:
+        """Get the past comparisons so that the file can be cumulative.
+        Else, return an empty dict."""
+        if os.path.isfile(comparison_filepath):
+            with open(comparison_filepath, "r") as f:
+                return json.load(f)
+        else: return {}
+
+    @staticmethod
+    def write_comparisons(comparison_filepath: str, cumulative_comparisons: dict):
+        """Write API resource comparisons to a specified file."""
+        with open(comparison_filepath, "w") as f:
+            logging.info(f"Saving comparisons to {comparison_filepath}")
+            json.dump(cumulative_comparisons, f, indent=2)
+            logging.info("Done.")
+
+    def compare(self, existing_comparisons: dict, api_resources: list[ApiResource], dry_run: bool=False) -> dict:
+        results: dict = existing_comparisons
         for api_resource in api_resources:
             updated_resource = None
 
@@ -24,7 +43,6 @@ class Comparator:
                 if not api_resource.xml_for_update_request:
                     if api_resource.xml_from_get_request:
                         results[api_resource.identifier] = "Update will not be performed."
-                    
                     continue
 
                 updated_resource = api_resource.xml_for_update_request

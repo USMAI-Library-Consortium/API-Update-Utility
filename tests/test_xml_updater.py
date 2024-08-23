@@ -209,3 +209,21 @@ class TestResourceUpdaterXML(unittest.TestCase):
         result = xu.update_resource(test_resource)
 
         self.assertEqual(result.xml_for_update_request, expected_xml_resource)
+
+
+    def test_no_update_needed_no_xml_returned(self):
+        """The XML does not have a country XML, so it should return None so that the API 
+        PUT request is not run"""
+        xu = XMLUpdater(xpaths=["/vendor/country"], operations=["update"])
+        test_resource = ApiResource(
+            "11224", "https://fakeserver/id", update_values=["USA"])
+        
+        with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
+            xml_resource = f.read()
+        test_resource.xml_from_get_request = xml_resource
+
+        updated_api_resource = xu.update_resource(test_resource)
+
+        self.assertIsNone(updated_api_resource.xml_for_update_request)
+
+        

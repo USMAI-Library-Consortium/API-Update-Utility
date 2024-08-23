@@ -22,7 +22,9 @@ I'll describe how to work with both modes below.
 
 To start a project, first create a virtual environment and install the requirements. Then, you can run the command `python3 -m generate_project project_name` to start your first project! This command will create a project folder in ./projects
 
-The main file in this folder is called 'project_settings.py', and predictibly it's where you configure your project. For all projects, the following settings will be the same:
+The progress.csv file lists all resources that have been completely processed during prior production (e.g, not dry-run) runs. They will have a status indicating success or failure. Deleting all the data here will reset the program to start at the beginning.
+
+The main file in this folder is called 'project_settings.py', and predictibly it's where you configure your project. For both default and advanced modes, the following settings are configured in the same way:
 
 ### Things you must change
 
@@ -108,3 +110,15 @@ You can use any of these values to make the changes to the XML. You could also r
 You should return the stringified, pretty-printed XML if you made changes to the XML, or None if there are no updates to perform. The XML that's reutnred will be sent to the API. If you return None, indicating that no updates are needed, the update will be marked as successful and will not be worked on further.
 
 Now, you're ready to roll! To run your project, run the command `python3 -m run_program your_project_name`
+
+## FAQ / Troubleshooting
+
+### Ahh! The program hanged! What do I do!
+
+You're safe to press ctrl-c to stop the program. It will save any progress up until the hang. You should be safe to start another run and it should ick up where it left off.
+
+If you want to be extra safe, you can look at the logs for the run and determine the resource it was working on when it hung. You should then verify whether it's been updated by looking in the UI for the application or running a get request, and if it has, ensure that it has a 'resource_identifier, success' entry in progress.csv. 
+
+### Why XML??
+
+Yes, I know JSON is the way of the future. However, the application we developed this for (ExLibris Alma) doesn't play nicely with JSON so we used XML.

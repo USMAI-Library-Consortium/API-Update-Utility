@@ -17,7 +17,7 @@ class TestComparator(unittest.TestCase):
             api_resource.update_response = f.read()
 
         c = Comparator(xpath_of_resource_in_put_response="/vendor")
-        result = c.compare([api_resource])
+        result = c.compare({}, [api_resource])
 
         self.assertDictEqual(result, {
             "BRILL": {
@@ -43,7 +43,7 @@ class TestComparator(unittest.TestCase):
             api_resource.update_response = f.read()
 
         c = Comparator(xpath_of_resource_in_put_response="/results/vendor")
-        result = c.compare([api_resource])
+        result = c.compare({}, [api_resource])
 
         self.assertDictEqual(result, {
             "BRILL": {
@@ -60,7 +60,7 @@ class TestComparator(unittest.TestCase):
         api_resource.mark_failed()
         api_resource.xml_for_update_request = "FILLER"
         c = Comparator(xpath_of_resource_in_put_response="/results/vendor")
-        result = c.compare([api_resource])
+        result = c.compare({}, [api_resource])
 
         self.assertDictEqual(result, {})
 
@@ -76,7 +76,7 @@ class TestComparator(unittest.TestCase):
             api_resource.update_response = f.read()
 
         c = Comparator()
-        result = c.compare([api_resource])
+        result = c.compare({}, [api_resource])
 
         self.assertDictEqual(result, {
             "BRILL": "No Difference"
@@ -117,7 +117,7 @@ class TestComparator(unittest.TestCase):
         with open("tests/testdata/xml/test_vendor_from_put.xml", "rb") as f:
             api_resource_3.update_response = f.read()
 
-        result = c.compare([api_resource_1, api_resource_2, api_resource_3])
+        result = c.compare({}, [api_resource_1, api_resource_2, api_resource_3])
 
         self.assertDictEqual(result, {
             "RESOURCE_1": "No Difference",
@@ -142,7 +142,7 @@ class TestComparator(unittest.TestCase):
             api_resource.xml_for_update_request = f.read()
 
         c = Comparator(xpath_of_resource_in_put_response=None)
-        result = c.compare([api_resource], dry_run=True)
+        result = c.compare({}, [api_resource], dry_run=True)
 
         self.assertDictEqual(result, {
             "BRILL": {
