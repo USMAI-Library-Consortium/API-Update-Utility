@@ -75,7 +75,7 @@ class TestComparator(unittest.TestCase):
         with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
             api_resource.update_response = f.read()
 
-        c = Comparator()
+        c = Comparator("/vendor")
         result = c.compare({}, [api_resource])
 
         self.assertDictEqual(result, {
@@ -152,4 +152,24 @@ class TestComparator(unittest.TestCase):
                 }
             }
         }
+        )
+
+    def test_comparator_no_update_run_correct_message(self):
+        """If no update needs to be made to the API resource, it will not have XML from the PUT response.
+        We want to ensure that a proper message is printed out."""
+        api_resource = ApiResource("BRILL", "https://url.com")
+        api_resource.xml_for_update_request = "FILLER"
+        with open("tests/testdata/xml/test_vendor_from_get.xml", "rb") as f:
+            api_resource.xml_from_get_request = f.read()
+
+        # The combo of these two indicates no update was needed.
+        api_resource.update_response = None
+        api_resource.status = "success"
+
+        c = Comparator(xpath_of_resource_in_put_response="/vendor")
+        result = c.compare({}, [api_resource])
+
+        self.assertDictEqual(result, {
+                "BRILL": "Update was not run; XML update function returned None indicating update did not need to be performed."
+            }
         )

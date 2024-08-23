@@ -31,50 +31,52 @@ class Comparator:
 
     def compare(self, existing_comparisons: dict, api_resources: list[ApiResource], dry_run: bool=False) -> dict:
         results: dict = existing_comparisons
+        
         for api_resource in api_resources:
             updated_resource = None
 
+            # DRY RUN ----------------------------------------
             if dry_run:
-                # Only run the process for api resources that are pending (failed would indicate
-                # the GET response failed or updating the body XML failed)
-                if api_resource.status != "pending":
+                # Only run the process for api resources that aren't failed.
+                if api_resource.status == "failed":
                     continue
 
+                # If there isn't an XML for update request, that means the update
+                # won't be performed.
                 if not api_resource.xml_for_update_request:
-                    if api_resource.xml_from_get_request:
-                        results[api_resource.identifier] = "Update will not be performed."
+                    results[api_resource.identifier] = "Update will not be performed."
                     continue
 
                 updated_resource = api_resource.xml_for_update_request
+
+            # PRODUCTION RUN ----------------------------------
             else:
-                # Production run
                 # Only run the process for api resources that were updated successfully
                 if api_resource.status != "success":
                     continue
 
-                if not api_resource.xml_for_update_request:
-                    results[api_resource.identifier] = "Update was not run; XML update returned empty update body."
+                # If there's not an update response, but it is still successful, this means
+                # the resource didn't need to be updated.
+                if not api_resource.update_response:
+                    results[api_resource.identifier] = "Update was not run; XML update function returned None indicating update did not need to be performed."
                     continue
                 
                 updated_resource = api_resource.update_response
-                if self.xpath_of_resource_in_put_response:
-                    try:
-                        updated_resource = self.pull_xml_element_from_dict(updated_resource, self.xpath_of_resource_in_put_response, api_resource.identifier)
-                    except ValueError as ve:
-                        logging.exception(ve.__str__())
-                        results[api_resource.identifier] = ve.__str__()
-                        continue
 
-            diff = DeepDiff(xmltodict.parse(api_resource.xml_from_get_request), xmltodict.parse(updated_resource))
-            if diff: 
-                diff = diff.to_json()
-                diff = json.loads(diff)
-            
+                try:
+                    updated_resource = self.pull_xml_element_from_dict(updated_resource, self.xpath_of_resource_in_put_response, api_resource.identifier)
+                except ValueError as ve:
+                    results[api_resource.identifier] = ve.__str__()
+                    continue
+
+            deepdif_obj = DeepDiff(xmltodict.parse(api_resource.xml_from_get_request), xmltodict.parse(updated_resource))
+            differences_dict = json.loads(deepdif_obj.to_json())
+        
             # If there is no difference between the two, add the string "No Difference" instead
-            if len(diff.keys()) == 0:
-                diff = "No Difference"
+            if len(differences_dict.keys()) == 0:
+                differences_dict = "No Difference"
             
-            results[api_resource.identifier] = diff
+            results[api_resource.identifier] = differences_dict
         
         return results
     

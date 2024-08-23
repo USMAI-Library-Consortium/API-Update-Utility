@@ -3,7 +3,6 @@ import os
 import logging
 import shutil
 import requests
-import json
 from tqdm import tqdm
 from datetime import datetime
 
@@ -45,8 +44,7 @@ def main(project_name: str):
 
     # ------------------------- INITIALIZE THE NEEDED COMPONENTS --------------------------
 
-    pm = ProgressManager(
-        project_path, retry_failed=settings.retry_failed)
+    pm = ProgressManager(project_path, retry_failed=settings.retry_failed)
     backuper = Backup(project_path=project_path)
     xu = XMLUpdater(update_function=settings.custom_xml_update_function if settings.use_custom_xml_update_function else None,
                         xpaths=settings.xpaths, operations=settings.xpath_operations)
@@ -64,8 +62,7 @@ def main(project_name: str):
 
     # ------------------------- GET API RESOURCES FROM UPDATE FILE --------------------------
 
-    api_resources = read_update_file(
-        settings, api_resources_to_exclude=pm.previously_completed_api_resources)
+    api_resources = read_update_file(settings, api_resources_to_exclude=pm.previously_completed_api_resources)
 
     if len(api_resources) == 0:
         logging.info(f"Exiting - no resources to update.{
@@ -168,7 +165,7 @@ def main(project_name: str):
             logging.exception("Something went wrong in running the comparator.")
 
         # --------------------- SAVE STATE ------------------------
-        
+
         if settings.dry_run == False:
             logging.info("Saving state...")
             pm.save_state(api_resources)
