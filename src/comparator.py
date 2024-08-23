@@ -4,14 +4,13 @@ import json
 from deepdiff.diff import DeepDiff
 import lxml
 import logging
-from deepdiff.model import PrettyOrderedSet
 from .api_resource import ApiResource
 
 class Comparator:
     def __init__(self, xpath_of_resource_in_put_response: str | None = None):
         self.xpath_of_resource_in_put_response = xpath_of_resource_in_put_response
 
-    def compare(self, api_resources: list[ApiResource], dry_run: bool=False):
+    def compare(self, api_resources: list[ApiResource], dry_run: bool=False) -> dict:
         results: dict = {}
         for api_resource in api_resources:
             updated_resource = None

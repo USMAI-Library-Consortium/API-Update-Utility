@@ -5,9 +5,10 @@ import shutil
 import requests
 import json
 from tqdm import tqdm
+from datetime import datetime
 
 from src.get_configuration import get_configuration
-from src.read_input import read_input
+from src.read_update_file import read_update_file
 from src.retrieve_resource import retrieve_resource
 from src.backup import Backup
 from src.xml_updater import XMLUpdater
@@ -17,13 +18,17 @@ from src.comparator import Comparator
 
 
 def main(project_name: str):
+    """The function that runs the actual update utility."""
+    # ---------------- LOOK FOR PROJECT --------------------
     project_path = f"projects/{project_name}"
     if not os.path.exists(project_path):
         raise FileNotFoundError(
             f"Project '{project_name}' has not been initialized.")
 
-    # Initialize logger
-    logging.basicConfig(filename=f"{project_path}/logs.log",
+    # ---------- INITIALIZE LOGGER; PRINT INIT MESSAGES ------------------
+    # Timestamp for logfile
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+    logging.basicConfig(filename=f"{project_path}/logs_{timestamp}.log",
                         format='%(levelname)s:%(asctime)s: %(message)s', level=logging.INFO)
     logging.info("Starting API Update Utility...")
     logging.info(f"Project: {project_name}")
@@ -51,7 +56,7 @@ def main(project_name: str):
     session = requests.Session()
 
     # Get the API resources from the CSV, excluding ones that were done previously
-    api_resources = read_input(
+    api_resources = read_update_file(
         settings, api_resources_to_exclude=pm.previously_completed_api_resources)
 
     if len(api_resources) == 0:
@@ -88,11 +93,10 @@ def main(project_name: str):
                     if result == -1:
                         logging.error(f"Could not back up vendor {
                                     verified_api_resource.identifier}")
-                        verified_api_resource.status = "failed"
+                        verified_api_resource.mark_failed()
                     logging.debug("Done")
                 else:
-                    logging.debug(f"Skipping backup of resource {
-                                verified_api_resource.identifier} due to status '{verified_api_resource.status}'.")
+                    logging.debug(f"Skipping backup of resource {verified_api_resource.identifier} due to status '{verified_api_resource.status}'.")
 
             logging.debug("Updating XML...")
             resource_with_updated_xml = xu.update_resource(verified_api_resource)

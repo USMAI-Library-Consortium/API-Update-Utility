@@ -69,9 +69,9 @@ class TestResourceUpdaterXML(unittest.TestCase):
 
     def test_update_one_resource_insert_el_with_xpath(self):
         xu = XMLUpdater(
-            xpaths=["/vendor/meta/gracePeriod"], operations=["insert"])
+            xpaths=["/vendor/meta/gracePeriod/hours"], operations=["insert"])
         test_resource = ApiResource(
-            "11224", "https://fakeserver/id", ["<hours>12</hours>"])
+            "11224", "https://fakeserver/id", ["12"])
 
         with open("tests/testdata/xml/xml_resource.xml", "rb") as f:
             xml_resource = f.read()
@@ -128,7 +128,7 @@ class TestResourceUpdaterXML(unittest.TestCase):
 
     def test_update_one_resource_delete_el_all_in_list_with_xpath(self):
         xu = XMLUpdater(
-            xpaths=["/vendor/meta/gracePeriod"], operations=["delete"])
+            xpaths=["/vendor/meta/gracePeriod[1]"], operations=["delete"])
         test_resource = ApiResource(
             "11224", "https://fakeserver/id", update_values=["*"])
 

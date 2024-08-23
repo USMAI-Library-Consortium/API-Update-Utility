@@ -1,13 +1,13 @@
 import unittest 
 
-from src.read_input import read_input
+from src.read_update_file import read_update_file
 from src.get_configuration import get_configuration
 
 class TestReadInput(unittest.TestCase):
 
-    def test_read_input(self):
+    def test_read_update_file(self):
         settings = get_configuration("tests/testdata/proj_basic")
-        api_resources = read_input(settings, api_resources_to_exclude=[])
+        api_resources = read_update_file(settings, api_resources_to_exclude=[])
 
         self.assertEqual(api_resources[0].identifier, "19982")
         self.assertEqual(api_resources[1].identifier, "123199")
@@ -24,9 +24,9 @@ class TestReadInput(unittest.TestCase):
         self.assertEqual(api_resources[2].update_values[0], "Denmark")
         self.assertEqual(api_resources[3].update_values[0], "Chile")
 
-    def test_read_input_with_previously_completed_values(self):
+    def test_read_update_file_with_previously_completed_values(self):
         settings = get_configuration("tests/testdata/proj_basic")
-        api_resources = read_input(settings, api_resources_to_exclude=["19982"])
+        api_resources = read_update_file(settings, api_resources_to_exclude=["19982"])
 
         self.assertEqual(api_resources[0].identifier, "123199")
         self.assertEqual(api_resources[1].identifier, "23844")
@@ -42,38 +42,38 @@ class TestReadInput(unittest.TestCase):
 
     def test_read_configuration_no_api_key(self):
         settings = get_configuration("tests/testdata/proj_multiple_xpaths")
-        api_resources = read_input(settings, api_resources_to_exclude=[])
+        api_resources = read_update_file(settings, api_resources_to_exclude=[])
 
         self.assertEqual(api_resources[0].api_url, "https://alma.exlibrisgroup.com/users/19982")
 
     def test_read_configuration_multiple_xpaths(self):
         settings = get_configuration("tests/testdata/proj_multiple_xpaths")
-        api_resources = read_input(settings, api_resources_to_exclude=[])
+        api_resources = read_update_file(settings, api_resources_to_exclude=[])
 
         self.assertListEqual(api_resources[0].update_values, ["USA", "20093"])
         self.assertListEqual(api_resources[1].update_values, ["USA", "88283"])
         self.assertListEqual(api_resources[2].update_values, ["Denmark", "024"])
         self.assertListEqual(api_resources[3].update_values, ["Chile", "8839"])
 
-    def test_read_input_mismatched_xpaths_and_values(self):
+    def test_read_update_file_mismatched_xpaths_and_values(self):
         """There should be the same number of values and xpaths"""
         settings = get_configuration("tests/testdata/proj_mismatched_xpaths")
         with self.assertRaises(ValueError):
-            read_input(settings, [])
+            read_update_file(settings, [])
 
-    def test_read_input_mismatched_xpath_and_values_custom_function_no_error(self):
+    def test_read_update_file_mismatched_xpath_and_values_custom_function_no_error(self):
         """We should be able to put whatever combo of xpaths and values when we use a custom function"""
         """There should be the same number of values and xpaths"""
         settings = get_configuration("tests/testdata/proj_mismatched_xpaths_custom_function")
         
         # Just assert there's no errors thrown
-        read_input(settings, [])
+        read_update_file(settings, [])
 
-    def test_read_input_custom_function_no_update_value(self):
+    def test_read_update_file_custom_function_no_update_value(self):
         """Having no update values and no xpaths should be allowed when using a custom function"""
         settings = get_configuration("tests/testdata/proj_custom_function_no_xpaths")
 
-        api_resources = read_input(settings, [])
+        api_resources = read_update_file(settings, [])
 
         for api_resource in api_resources:
             self.assertEqual(api_resource.update_values, [])

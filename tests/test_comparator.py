@@ -57,7 +57,7 @@ class TestComparator(unittest.TestCase):
 
     def test_comparator_skip_api_resource_not_successful(self):
         api_resource = ApiResource("XLLSM", "https://example.com")
-        api_resource.status = "failed"
+        api_resource.mark_failed()
         api_resource.xml_for_update_request = "FILLER"
         c = Comparator(xpath_of_resource_in_put_response="/results/vendor")
         result = c.compare([api_resource])
