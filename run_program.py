@@ -46,7 +46,7 @@ def main(project_name: str):
 
     pm = ProgressManager(project_path, retry_failed=settings.retry_failed)
     backuper = Backup(project_path=project_path)
-    xu = XMLUpdater(update_function=settings.custom_xml_update_function if settings.use_custom_xml_update_function else None,
+    xu = XMLUpdater(custom_update_function=settings.custom_xml_update_function if settings.use_custom_xml_update_function else None,
                         xpaths=settings.xpaths, operations=settings.xpath_operations)
     session = requests.Session()
 
