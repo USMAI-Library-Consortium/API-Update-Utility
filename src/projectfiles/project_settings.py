@@ -2,14 +2,14 @@
 # You MUST include the string '<resource_id> where you want the resource ID to be substituted
 api_url_template: str = "https://example.com/resource/<resource_id>"
 update_file: str = "input.csv"
-xpath_for_get_response_verification: str = "REQUIRED"
+xpath_for_get_response_verification: str = 
 
 # If you need it
 # Example: "apikey=1234"
 query_param_api_key: str | None = None
 
 # REQUIRED unless using a custom XML update function
-xpaths: list[str] | None = "REQUIRED"
+xpaths: str | list[str] | None = 
 xpath_operations: str | list[str] | None = "update"
 
 # RECOMMENDED

@@ -37,23 +37,24 @@ def get_configuration(project_path: str):
     # they're not using a custom xml update function, raise an error.
     if not project_settings.use_custom_xml_update_function and not project_settings.xpath_operations:
         raise ValueError("If you're not using a custom xml update function, operations cannot be None")
+    
+    xpaths = project_settings.xpaths
+    if not isinstance(xpaths, list):
+        xpaths = [xpaths]
 
     # This isn't super important functionally. It just allows the user to use a single xpath operation even 
     # if they want to work on multiple xpaths - it will set the operation for each xpath to that xpath operation.
     expanded_operations = []
     if isinstance(project_settings.xpath_operations, list):
         if not project_settings.use_custom_xml_update_function:
-            number_of_xpath_operations = len(project_settings.xpath_operations)
-            number_of_xpaths = len(project_settings.xpaths)
             # We need the number of xpath operations to equal the number of xpaths.
-            if number_of_xpath_operations != number_of_xpaths:
+            if len(project_settings.xpath_operations) != len(xpaths):
                 raise ValueError(
                     "If you include an array of xpathOperations, it must be equal to the number of xpaths.")
         expanded_operations = project_settings.xpath_operations
     elif isinstance(project_settings.xpath_operations, str):
         operation_to_do_for_all_xpaths = project_settings.xpath_operations
-        number_of_operations = len(project_settings.xpaths) if isinstance(project_settings.xpaths, list) else 1
-        for _ in range(0, number_of_operations):
+        for _ in xpaths:
             expanded_operations.append(operation_to_do_for_all_xpaths)
     else: expanded_operations = None
 
@@ -65,7 +66,7 @@ def get_configuration(project_path: str):
     settings.xpath_of_resource_in_put_response = project_settings.xpath_of_resource_in_put_response
     settings.api_url_template = project_settings.api_url_template
     settings.query_param_api_key = project_settings.query_param_api_key
-    settings.xpaths = project_settings.xpaths
+    settings.xpaths = xpaths
     settings.xpath_operations = expanded_operations
     settings.dry_run = project_settings.dry_run
     settings.update_limit = project_settings.update_limit
