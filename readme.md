@@ -107,7 +107,7 @@ You can use any of these values to make the changes to the XML. You could also r
 
 ### What you need to return
 
-You should return the stringified, pretty-printed XML if you made changes to the XML, or None if there are no updates to perform. The XML that's reutnred will be sent to the API. If you return None, indicating that no updates are needed, the update will be marked as successful and will not be worked on further.
+You should return the stringified, pretty-printed XML if you made changes to the XML, or None if there are no updates to perform. The XML that's returned will be sent to the API. If you return None, indicating that no updates are needed, the update will be marked as successful and will not be worked on further.
 
 Now, you're ready to roll! To run your project, run the command `python3 -m run_program your_project_name`
 
@@ -115,7 +115,7 @@ Now, you're ready to roll! To run your project, run the command `python3 -m run_
 
 ### Ahh! The program hanged! What do I do!
 
-You're safe to press ctrl-c to stop the program. It will save any progress up until the hang. You should be safe to start another run and it should ick up where it left off.
+You're safe to press ctrl-c to stop the program. It will save any progress up until the hang. You should be safe to start another run and it should pick up where it left off.
 
 If you want to be extra safe, you can look at the logs for the run and determine the resource it was working on when it hung. You should then verify whether it's been updated by looking in the UI for the application or running a get request, and if it has, ensure that it has a 'resource_identifier, success' entry in progress.csv. 
 
