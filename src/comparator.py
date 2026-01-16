@@ -34,17 +34,20 @@ class Comparator:
         
         for api_resource in api_resources:
             updated_resource = None
+            logging.debug(f"Comparing {api_resource.identifier}")
 
             # DRY RUN ----------------------------------------
             if dry_run:
                 # Only run the process for api resources that aren't failed.
                 if api_resource.status == "failed":
+                    logging.debug("Dry run, skipping, status=failed")
                     continue
 
                 # If there isn't an XML for update request, that means the update
                 # won't be performed.
                 if not api_resource.xml_for_update_request:
                     results[api_resource.identifier] = "Update will not be performed."
+                    logging.debug("Dry run, skipping, nothing to update")
                     continue
 
                 updated_resource = api_resource.xml_for_update_request
@@ -53,12 +56,14 @@ class Comparator:
             else:
                 # Only run the process for api resources that were updated successfully
                 if api_resource.status != "success":
+                    logging.debug("Update run, skipping, status=failed")
                     continue
 
                 # If there's not an update response, but it is still successful, this means
                 # the resource didn't need to be updated.
                 if not api_resource.update_response:
                     results[api_resource.identifier] = "Update was not run; XML update function returned None indicating update did not need to be performed."
+                    logging.debug("Update run, skipping, nothing to update")
                     continue
                 
                 updated_resource = api_resource.update_response
@@ -67,14 +72,17 @@ class Comparator:
                     updated_resource = self.pull_xml_element_from_dict(updated_resource, self.xpath_of_resource_in_put_response, api_resource.identifier)
                 except ValueError as ve:
                     results[api_resource.identifier] = ve.__str__()
+                    logging.debug("Update run, skipping, updated resource not found")
                     continue
 
+            logging.debug("Running DeepDiff")
             deepdif_obj = DeepDiff(xmltodict.parse(api_resource.xml_from_get_request), xmltodict.parse(updated_resource))
             differences_dict = json.loads(deepdif_obj.to_json())
         
             # If there is no difference between the two, add the string "No Difference" instead
             if len(differences_dict.keys()) == 0:
                 differences_dict = "No Difference"
+                logging.debug("No difference found")
             
             results[api_resource.identifier] = differences_dict
         

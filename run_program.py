@@ -38,10 +38,6 @@ def main(project_name: str):
 
     settings = get_configuration(f"projects/{project_name}")
 
-    final_update_limit = None
-    if settings.update_limit and settings.update_limit > 0:
-        final_update_limit = settings.update_limit
-
     # ------------------------- INITIALIZE THE NEEDED COMPONENTS --------------------------
 
     pm = ProgressManager(project_path, retry_failed=settings.retry_failed)
@@ -69,7 +65,11 @@ def main(project_name: str):
                      " (retryFailed is set to false, there may be failed resources. Check 'progress.csv')" if not settings.retry_failed else " Congrats!"}")
         return
 
-    logging.info(f"Resources to update: {settings.update_limit}")
+    final_update_limit = len(api_resources)
+    if settings.update_limit and settings.update_limit > 0 and settings.update_limit < final_update_limit:
+        final_update_limit = settings.update_limit
+
+    logging.info(f"Resources to update: {final_update_limit}")
     logging.info(f"Dry run mode: {settings.dry_run}")
 
     # ----------------------- START THE ACTUAL API WORK -----------------------------
@@ -142,7 +142,7 @@ def main(project_name: str):
                 past_comparison_dict = Comparator.get_past_comparisons(comparison_filepath)
 
                 # Run the comparator
-                cumulative_comparisons = comparator.compare(past_comparison_dict, api_resources)
+                cumulative_comparisons = comparator.compare(past_comparison_dict, api_resources, settings.dry_run)
 
                 # Write the results to the file
                 Comparator.write_comparisons(comparison_filepath, cumulative_comparisons)
@@ -157,7 +157,7 @@ def main(project_name: str):
 
                 # Run the comparator. NOTE there is no cumulative comparisons for dry run because the folder is
                 # deleted each time.
-                comparisons = comparator.compare({}, api_resources)
+                comparisons = comparator.compare({}, api_resources, settings.dry_run)
 
                 # Write the results to the file
                 Comparator.write_comparisons(comparison_filepath, comparisons)
